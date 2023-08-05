@@ -23,6 +23,6 @@ urlpatterns = [
     path('dj-admin/', admin.site.urls),
     path('',include('core.urls')),
     path('',include('account.urls')),
-    # path('',include('store.urls')),
+    path('',include('store.urls')),
     path('',include('adminpanel.urls')),
 ] + static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)

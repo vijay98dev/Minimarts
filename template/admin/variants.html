@@ -1,0 +1,47 @@
+{% extends 'admin/admin_dashboard.html' %} 
+{% load static %}
+{% block title%}Category{% endblock title %}
+
+{% block content %}
+
+<section class="section-conten padding-y" style="min-height: 84vh">
+  <!-- ============================ COMPONENT LOGIN   ================================= -->
+  <div class="card mx-auto" style="max-width: 800px; margin-top: 100px">
+    <div class="card-body">
+      <h4 class="card-title mb-4">Varients</h4>
+      <table class="table table-sm">
+        <thead>
+          <tr>
+              <th>Id</th>
+              <th>Price</th>
+              <th>Stock</th>
+              <th>Product Size</th>     
+              <th>Available</th>     
+              <th>Images</th>     
+              <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{{variants.id}}</td>
+            <td>{{variants.price}}</td>
+            <td>{{variants.stock}}</td>
+            <td>{{variants.product_size}}</td>
+            <td>{{variants.is_available}}</td>
+            <td><a href="{% url 'product-images' variants.id %}" class="btn btn-secondary btn-sm">Show Images</a></td>
+            <td><a href="{% url 'delete-variant' variants.id %}" class="btn btn-danger btn-sm"> Delete</a>/<a href="{% url 'edit-variant' variants.id %}"><button type="button" class="btn btn-info btn-sm">Edit</button></a></td>
+          </tr>
+        </tbody>
+      </table>
+      {% include 'include/alerts.html' %}
+      <a href="{% url 'add-variant' variants.id %}" class="btn btn-primary btn-sm mt-4">Add Variants</a>
+      <a href="{% url 'product' %}" class="btn btn-secondary btn-sm mt-4">Back</a>
+    </div>
+    <!-- card-body.// -->
+  </div>
+  <!-- card .// -->
+
+  <!-- ============================ COMPONENT LOGIN  END.// ================================= -->
+</section>
+
+{% endblock content %}

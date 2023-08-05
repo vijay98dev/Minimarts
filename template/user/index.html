@@ -29,17 +29,17 @@
     <!-- sect-heading -->
 
     <div class="row">
-      {% for product in product %}
+      {% for product in products %}
       <div class="col-md-3">
         <div class="card card-product-grid">
           <a href="./product-detail.html" class="img-wrap">
-            <img src="{{product.image.image.url}}" />
+            <img src="{{product.product_image.url}}" />
           </a>
           <figcaption class="info-wrap">
             <a href="./product-detail.html" class="title"
-              >{{product.product_name}}</a
+              >{{product.product.product_name}}</a
             >
-            <div class="price mt-1">₹{{product.price}}</div>
+            <div class="price mt-1">₹{{product.product_size.price}}</div>
             <!-- price-wrap.// -->
           </figcaption>
         </div>

@@ -117,7 +117,7 @@ def edit_category(request,id):
     return render(request,'admin/edit-category.html',context)
 
 def product(request):
-    product=ProductImage.objects.all()
+    product=Product.objects.all()
     context={
         'products':product
     }
@@ -177,3 +177,48 @@ def edit_product(request,id):
         'products':product
     }
     return render(request,'admin/edit-product.html',context)
+
+def variant(request,id):
+    variant=get_object_or_404(ProductSize,product=id)
+    context={
+        'variants':variant
+    }
+    return render(request,'admin/variants.html',context)
+
+def add_variant(request,id):
+
+    return render(request,'admin/add-variant.html')
+
+
+def  edit_variant(request,id):
+    pass
+
+def delete_variant(request,id):
+    pass
+
+def product_image(request,id):
+    images=ProductImage.objects.filter(product_size=id)
+    context={
+        'image':images
+    }
+    return render(request,'admin/product-image.html',context)
+
+def add_image(request,id):
+    product=ProductSize.objects.get(pk=id)
+    if request.method=='POST':
+        uploaded_image=request.FILES.getlist('image')
+        for images in uploaded_image:
+            images=ProductImage.objects.create(product_image=images,product_size=id,product=product)
+        messages.success(request,'Product added successfully')
+        return redirect('product')
+    image=get_object_or_404(ProductSize,pk=id)
+    context={
+        'images':image
+    }
+    return render(request,'admin/add-productimage.html',context)
+
+def edit_image(request,id):
+    pass
+
+def delete_image(request,id):
+    pass

@@ -1,5 +1,6 @@
 from django.db import models
 from category.models import Category
+from django.urls import reverse
 from django.utils.text import slugify
 
 # Create your models here.
@@ -22,20 +23,19 @@ class ProductSize(models.Model):
     slug=models.SlugField(max_length=100,unique=True)
     product=models.ForeignKey(Product,on_delete=models.CASCADE)
 
-
     def __str__(self) -> str:
         return self.product_size
-
 
     def soft_delete(self):
         self.is_delete=True
         self.save()
 
-
     def save(self, *args, **kwargs):
         self.slug = slugify(f"{self.product.product_name} {self.product_size}")
         super().save(*args, **kwargs)
 
+    def get_url(self):
+        return reverse("product_by_slug", args=[self.slug])
 
 class ProductImage(models.Model):
     product_image=models.ImageField(upload_to='photos/products', height_field=None, width_field=None, max_length=None)

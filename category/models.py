@@ -17,5 +17,5 @@ class Category(models.Model):
     def __str__(self):
         return self.category_name
 
-    def get_absolute_url(self):
-        return reverse("Category_detail", kwargs={"pk": self.pk})
+    def get_url(self):
+        return reverse("product_by_slug", args=[self.slug])

@@ -6,12 +6,12 @@
         <div class="col-lg-8">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title" style="margin-top: 70px;">Add Product</h3>
+                    <h3 class="card-title" style="margin-top: 70px;">Add Images</h3>
                 </div>
                 <div class="card-body">
-                    <form method="post" action="{% url 'add-product' %}" enctype="multipart/form-data">
+                    <form method="post" action="" enctype="multipart/form-data">
                         {% csrf_token %}
-                        <div class="form-group">
+                        {% comment %} <div class="form-group">
                             <label for="name">Product Name:</label>
                             <input type="text" class="form-control" id="name" name="product_name" required>
                         </div>
@@ -48,7 +48,7 @@
                                 {% endfor %}
                             </select>
                         </div>
-                        {% comment %} <div class="form-group">
+                        <div class="form-group">
                             <label for="price">Is_available:</label>
                             
                             <input type="checkbox" class="form-control" id="price" name="availablity" step="0.01" required>
@@ -59,7 +59,7 @@
                         </div>
                         <div class="text-center"> <!-- Center the form -->
                             <button type="submit" class="btn btn-sm btn-primary mt-4">Submit</button>
-                            <a href="{% url 'product' %}" class="btn btn-sm btn-secondary mt-4">Cancel</a>
+                            <a href="{% url 'variants' id=id %}" class="btn btn-sm btn-secondary mt-4">Cancel</a>
                         </div>
                     </form>
                 </div>

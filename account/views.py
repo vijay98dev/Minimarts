@@ -156,3 +156,21 @@ def delete_address(request,id):
     profile=UserProfile.objects.get(id=id)
     profile.delete()
     return redirect('address')
+
+def reset_password(request):
+    user=request.user
+    if request.method=='POST':
+        current=request.POST.get('current_password')
+        new=request.POST.get('new_password')
+        cofirm=request.POST.get('cofirm_password')
+        if user.check_password(current):
+            if new==cofirm:
+                user.set_password(new)
+                user.save()
+                messages.success(request,'Password Reset Successful')
+                return redirect('profile')
+            else:
+                messages.error(request,'Entered password does not match')
+                return redirect('reset')
+    return render(request,'user/reset-password.html')
+        

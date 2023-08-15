@@ -12,6 +12,7 @@ urlpatterns = [
     path('address/',views.address,name='address'),
     path('edit-address/<int:id>',views.edit_address,name='edit-address'),
     path('delete-address/<int:id>',views.delete_address,name='delete-address'),
+    path('reset',views.reset_password,name='reset'),
 ]
 
 

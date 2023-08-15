@@ -65,3 +65,19 @@ class CustomUser(AbstractBaseUser):
     
     def has_module_perms(self, add_label):
         return True
+    
+
+
+class UserProfile(models.Model):
+    user=models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    address=models.CharField( max_length=250)
+    street = models.CharField(max_length=100)
+    city = models.CharField(max_length=100)
+    state = models.CharField( max_length=100)
+    country = models.CharField( max_length=100)
+    pin_code = models.CharField(max_length=10)
+    profile_image=models.ImageField(upload_to='photo/profile-image', max_length=None,null=True)
+    
+
+    def __str__(self):
+        return self.user.username

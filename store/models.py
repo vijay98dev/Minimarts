@@ -24,7 +24,7 @@ class ProductSize(models.Model):
     product=models.ForeignKey(Product,on_delete=models.CASCADE)
 
     def __str__(self) -> str:
-        return self.product_size
+        return f'{self.product.product_name}'
 
     def soft_delete(self):
         self.is_delete=True
@@ -34,8 +34,9 @@ class ProductSize(models.Model):
         self.slug = slugify(f"{self.product.product_name} {self.product_size}")
         super().save(*args, **kwargs)
 
-    def get_url(self):
-        return reverse("product_by_slug", args=[self.slug])
+
+    def get_id(self):
+        return reverse("edit-variant",args=[self.product.id,self.id])
 
 class ProductImage(models.Model):
     product_image=models.ImageField(upload_to='photos/products', height_field=None, width_field=None, max_length=None)
@@ -44,3 +45,6 @@ class ProductImage(models.Model):
 
     def __str__(self) -> str:
         return self.product_image
+    
+    def get_url(self):
+        return reverse("product_details", args=[self.product.category.slug,self.product_size.slug])

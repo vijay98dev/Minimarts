@@ -40,7 +40,7 @@ def admin_login(request):
 def admin_dashboard(request):
     return render(request,'admin/admin_dashboard.html')
 
-@login_required(login_url='login')
+@login_required(login_url='admin-login')
 def admin_logout(request):
     logout(request)
     messages.success(request,'Logout successful')
@@ -158,7 +158,8 @@ def add_product(request):
 
 
 def delete_product(request,id):
-    product=get_object_or_404(ProductSize,id=id)
+    product=get_object_or_404(Product,id=id)
+    variant=ProductSize.objects.get(product=product.i)
     product.soft_delete()
     return redirect('product')
 
@@ -179,22 +180,89 @@ def edit_product(request,id):
     return render(request,'admin/edit-product.html',context)
 
 def variant(request,id):
-    variant=get_object_or_404(ProductSize,product=id)
+    variant= ProductSize.objects.filter(product=id)
+    product=get_object_or_404(Product,pk=id)
+
     context={
-        'variants':variant
+        'variants':variant,
+        'product':product
     }
     return render(request,'admin/variants.html',context)
 
-def add_variant(request,id):
+def add_variant(request,id):    
+    product=Product.objects.get(pk=id)
+    variant=get_object_or_404(ProductSize,product=id)
+    if request.method=='POST':
+        size= float(request.POST.get('size'))
+        price=float(request.POST.get('price'))
+        stock=int(request.POST.get('stock'))
+        # if ProductSize.objects.filter(product_size=variant.product_size).exists():
+        #     messages.error(request,'Size already exists')
+        #     return redirect('add-product')
+        # else:
+        size_product=ProductSize.objects.create(price=price,stock=stock,product_size=size,product=product)
+        messages.success(request,'Product added successfully')
+        return redirect('product')
+            
+    context={
+        'variants':variant
+    }
 
-    return render(request,'admin/add-variant.html')
+    return render(request,'admin/add-variant.html',context)
 
 
-def  edit_variant(request,id):
-    pass
+def edit_variant(request,id):
+    # product=ProductSize.objects.get(id=id)
+    # if request.method=='POST':
+    #     size=request.POST.get('size')
+    #     price=request.POST.get('price')
+    #     stock=request.POST.get('stock')
+
+    # variant=ProductSize.objects.get(id=varient_id)
+    # print(variant,'12345678900000000000000000000000000000000000000000000000000000000000000000000000000000000000')
+    # if request.method=='POST':
+    #     size= request.POST.get('size')
+    #     print('3456789023456111111111111111111111111111111111')
+
+    #     price=request.POST.get('price')
+    #     stock=request.POST.get('stock')
+    #     if size is not None:
+    #         size=float(size)
+    #     if price is not None:
+    #         price=float(price)
+    #     if stock is not None:
+    #         try:
+    #             stock = int(stock)
+    #         except ValueError:
+    #             messages.error(request, 'Invalid stock value')
+    #             return redirect('variants', id=variant.id)
+    #         variant.stock=stock
+
+    #     if size is not None and variant.product_size != size:
+    #         if ProductSize.objects.filter(product=variant.product,product_size=size).exclude(id=id).exists():
+    #             messages.error(request,'Size already exists')
+    #             return redirect('variants' , id=variant.id)
+    #         else:
+    #             variant.product_size = size
+        
+    #     if variant.price != price or variant.stock != stock:
+    #         variant.price = price
+    #         # variant.stock = stock
+    #         # variant.product_size = size
+    #         print(variant,3456789023456)
+    #         variant.save()
+    #         messages.success(request,'Variant Updated Succesfully')
+    #     else:
+    #         messages.info(request,'No changes were made to the variant')
+    #     return redirect('variants' , id=variant.id)
+    # variant=get_object_or_404(ProductSize,id=id)
+    context={'variants':variant}
+    return render(request,'admin/edit-variant.html',context)
 
 def delete_variant(request,id):
-    pass
+    variant=get_object_or_404(ProductSize,pk=id)
+    variant.delete()
+    return redirect('product')
 
 def product_image(request,id):
     images=ProductImage.objects.filter(product_size=id)

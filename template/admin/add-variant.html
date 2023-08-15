@@ -9,7 +9,7 @@
                     <h3 class="card-title" style="margin-top: 70px;">Add Variant</h3>
                 </div>
                 <div class="card-body">
-                    <form method="post" action="{% url 'add-variant' %}" enctype="multipart/form-data">
+                    <form method="post" action="{% url 'add-variant' variants.product.id  %}" enctype="multipart/form-data">
                         {% csrf_token %}
                         
                         

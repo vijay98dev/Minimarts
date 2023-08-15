@@ -22,19 +22,22 @@
           </tr>
         </thead>
         <tbody>
+          {% for variant in variants %}
           <tr>
-            <td>{{variants.id}}</td>
-            <td>{{variants.price}}</td>
-            <td>{{variants.stock}}</td>
-            <td>{{variants.product_size}}</td>
-            <td>{{variants.is_available}}</td>
-            <td><a href="{% url 'product-images' variants.id %}" class="btn btn-secondary btn-sm">Show Images</a></td>
-            <td><a href="{% url 'delete-variant' variants.id %}" class="btn btn-danger btn-sm"> Delete</a>/<a href="{% url 'edit-variant' variants.id %}"><button type="button" class="btn btn-info btn-sm">Edit</button></a></td>
+            <td>{{variant.id}}</td>
+            <td>{{variant.price}}</td>
+            <td>{{variant.stock}}</td>
+            <td>{{variant.product_size}}</td>
+            <td>{{variant.is_available}}</td>
+            <td><a href="{% url 'product-images' variant.id %}" class="btn btn-secondary btn-sm">Show Variants</a></td>
+            <td><a href="{% url 'delete-variant' variant.id %}" class="btn btn-danger btn-sm"> Delete</a>/<a href="{% url 'edit-variant' variant.id %}"><button type="button" class="btn btn-info btn-sm">Edit</button></a></td>
           </tr>
+          {% endfor %}
         </tbody>
       </table>
       {% include 'include/alerts.html' %}
-      <a href="{% url 'add-variant' variants.id %}" class="btn btn-primary btn-sm mt-4">Add Variants</a>
+
+      <a href="{% url 'add-variant' id=product.id %}" class="btn btn-primary btn-sm mt-4">Add Variant</a>
       <a href="{% url 'product' %}" class="btn btn-secondary btn-sm mt-4">Back</a>
     </div>
     <!-- card-body.// -->

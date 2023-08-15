@@ -1,11 +1,12 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import get_object_or_404, render,redirect
 from account.forms import RegistrationForm
-from account.models import CustomUser
+from account.models import CustomUser,UserProfile
 from account.helper import MessageHandler
 from django.contrib import messages
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.decorators import login_required
 import random
+
 
 # Create your views here.
 def register(request):
@@ -76,3 +77,82 @@ def signout(request):
     messages.success(request,"Logout was successful.")
     return redirect('signin')
 
+
+def profile(request):
+    user=request.user
+    profile=UserProfile.objects.filter(user=user)
+    if profile.exists():
+        profile=profile.all()
+    else:
+        profile=None
+    
+    context={
+        'users':user,
+        'profile':profile
+    }
+    return render(request,'user/profile.html',context)
+
+def add_address(request):
+    user=request.user
+    if request.method=='POST':
+        address=request.POST.get('address')
+        street=request.POST.get('street')
+        city=request.POST.get('city')
+        state=request.POST.get('state')
+        country=request.POST.get('country')
+        pin_code=request.POST.get('pin_code')
+
+
+        profile=UserProfile(user=user)
+        profile.address=address
+        profile.street=street
+        profile.city=city
+        profile.state=state
+        profile.country=country
+        profile.pin_code=pin_code
+        profile.save()
+        messages.success(request,'Address saved successfull')
+        return redirect('profile')
+    return render(request,'user/add-address.html')
+
+def address(request):
+    user=request.user
+    profile=UserProfile.objects.filter(user=user)
+    context={
+        'user':user,
+        'profile':profile
+    }
+    return render(request,'user/address.html',context)
+
+
+def edit_address(request,id) :
+    user=request.user
+    profile=UserProfile.objects.get(id=id)
+    if request.method=='POST':
+        address=request.POST.get('address')
+        street=request.POST.get('street')
+        city=request.POST.get('city')
+        state=request.POST.get('state')
+        country=request.POST.get('country')
+        pin_code=request.POST.get('pin_code')
+
+        profile.address=address
+        profile.street=street
+        profile.city=city
+        profile.state=state
+        profile.country=country
+        profile.pin_code=pin_code
+        profile.save()
+        return redirect('address')
+    messages.success(request,'Address changed successfull')
+    context={
+        'user':user,
+        'profile':profile
+    }
+    return render(request,'user/edit-address.html',context)
+
+def delete_address(request,id):
+    user=request.user
+    profile=UserProfile.objects.get(id=id)
+    profile.delete()
+    return redirect('address')

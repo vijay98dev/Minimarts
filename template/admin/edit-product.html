@@ -13,16 +13,16 @@
                         {% csrf_token %}
                         <div class="form-group">
                             <label for="name">Product Name:</label>
-                            <input type="text" class="form-control" id="name" name="product_name" value='{{product.product_name}}' required>
+                            <input type="text" class="form-control" id="name" name="product_name" value='{{products.product_name}}' required>
                         </div>
                         <div class="form-group">
                             <label for="description">Description:</label>
-                            <textarea name="description" class="form-control" rows="4" required value='{{product.description}}'></textarea>
+                            <textarea name="description" class="form-control" rows="4" required value='{{products.description}}'></textarea>
                         </div>
-                        <div class="form-group">
+                        {% comment %} <div class="form-group">
                             <label for="stock">Stock:</label>
                             <input type="number" class="form-control" id="stock" name="stock" required value="{{product.stock}}">
-                        </div>
+                        </div> {% endcomment %}
                         {% comment %} <div class="form-group">
                             <label for="size">Size:</label>
                             <select class="form-control text-black" id="size" name="size" required>
@@ -42,7 +42,7 @@
                         <div class="form-group">
                             <label for="category">Category:</label>
                             <select class="form-control text-black" id="category" name="category" required>
-                                <option value="{{product.category}}" disabled selected>Select a category</option>
+                                <option value="" disabled selected>{{products.category}}</option>
                                 {% for category in categories %}
                                     <option value="{{ category.id }}">{{ category.category_name }}</option>
                                 {% endfor %}

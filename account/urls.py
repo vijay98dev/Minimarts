@@ -13,6 +13,7 @@ urlpatterns = [
     path('edit-address/<int:id>',views.edit_address,name='edit-address'),
     path('delete-address/<int:id>',views.delete_address,name='delete-address'),
     path('reset',views.reset_password,name='reset'),
+    path('order-list',views.order_list,name='order-list'),
 ]
 
 

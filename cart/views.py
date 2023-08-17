@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from store.models import Product,ProductImage,ProductSize
 from cart.models import Cart,CartItems
-from account.models import CustomUser
+from account.models import CustomUser,UserProfile
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse
 # Create your views here.
@@ -9,6 +9,7 @@ def cart(request,total=0,quantity=0,cart_items=None):
     try:
         tax=0
         grand_total=0
+        
         cart=Cart.objects.get(cart_id=_cart_id(request))
         cart_items=CartItems.objects.filter(cart=cart)
         for cart_item in cart_items:
@@ -34,7 +35,7 @@ def _cart_id(request):
     return cart
 
 def add_cart(request,product_id):
-    size=request.GET['size']
+    size=request.POST.get('size')
     
     product=ProductImage.objects.get(id=product_id)     
     try:
@@ -78,3 +79,16 @@ def remove_cart_items(request,product_id):
     cart_item=CartItems.objects.get(product=product,cart=cart)
     cart_item.delete()
     return redirect('cart')
+
+# def checkout(request):
+#     user=request.user
+#     address=UserProfile.objects.filter(user=user)
+#     print(address)
+#     cart_items=CartItems.objects.filter(cart__user=user)
+#     context={
+#         'user':user,
+#         'address':address,
+#         'cart_items':cart_items,
+#     }
+#     return render(request,'user/checkout.html',context)
+

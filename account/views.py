@@ -6,6 +6,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.decorators import login_required
 import random
+from orders.models import Order,OrderProduct
 
 
 # Create your views here.
@@ -153,7 +154,7 @@ def edit_address(request,id) :
 
 def delete_address(request,id):
     user=request.user
-    profile=UserProfile.objects.get(id=id)
+    profile=UserProfile.objects.get(id=id,user=user)
     profile.delete()
     return redirect('address')
 
@@ -174,3 +175,13 @@ def reset_password(request):
                 return redirect('reset')
     return render(request,'user/reset-password.html')
         
+
+def order_list(request):
+    user=request.user
+    order=Order.objects.filter(user=user)
+    order_items=OrderProduct.objects.filter(order=order)
+    contex={
+        'order':order,
+        'order_item':order_items,
+    }
+    return render(request,'user/order-list.html',contex)

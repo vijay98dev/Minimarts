@@ -2,7 +2,8 @@
     <!--   SIDEBAR   -->
     <ul class="list-group">
       <a class="list-group-item" href=""> Account </a>
-      <a class="list-group-item" href=""> My Orders </a>
+      <a class="list-group-item" href="{% url 'order-list' %}"> My Orders </a>
+      {% comment %} <a class="list-group-item" href="{% url 'wishlist' %}"> Wishlist </a> {% endcomment %}
       <a class="list-group-item" href="{% url 'add-address' %}"> Add Address </a>
       <a class="list-group-item" href="{% url 'address' %}"> Manage Address </a>
       <a class="list-group-item" href="{% url 'reset' %}"> Reset Password </a>  

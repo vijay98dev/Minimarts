@@ -7,6 +7,7 @@ from account.models import CustomUser
 from category.models import Category
 from store.models import Product,ProductImage,ProductSize
 from django.utils.text import slugify
+from orders.models import Order,OrderProduct
 
 
 
@@ -164,17 +165,23 @@ def delete_product(request,id):
     return redirect('product')
 
 def edit_product(request,id):
-    product=ProductSize.objects.get(pk=id)
-    # if request.method=='POST':
-    #     name=request.POST.get('product_name')
-    #     description=request.POST.get('description')
-    #     category=request.POST.get('category')
-    #     if Product.objects.filter(product_name=name).exists:
-    #         messages.error(request,'Product name already exists')
-    #         return redirect('product')
-    #     # else:
-    #     #     product.product_name=
+    product=Product.objects.get(pk=id)
+    if request.method=='POST':
+        name=request.POST.get('product_name')
+        description=request.POST.get('description')
+        category=request.POST.get('category')
+        if Product.objects.filter(product_name=name).exclude(pk=id).exists:
+            messages.error(request,'Product name already exists')
+            return redirect('product')
+        else:
+            product.product_name=name
+            product.description=description
+            product.category=category
+            product.save()
+            return redirect('product')
+    categories=Category.objects.all()
     context={
+        'categories':categories,
         'products':product
     }
     return render(request,'admin/edit-product.html',context)
@@ -290,3 +297,18 @@ def edit_image(request,id):
 
 def delete_image(request,id):
     pass
+
+
+
+def order_details(request,id):
+    order = get_object_or_404(Order, id=id)
+    product = OrderProduct.objects.filter(order=order)
+    order_item=OrderProduct.objects.all()
+    order_status_choices=OrderProduct.ORDER_STATUS
+    context={
+        'products':product,
+        'order':order,
+        'order_item':order_item,
+        'order_status_choices':order_status_choices,
+        }
+    return render(request,'admin/admin_order_details.html',context)

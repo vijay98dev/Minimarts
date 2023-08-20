@@ -4,6 +4,9 @@ from cart.models import Cart,CartItems
 from account.models import CustomUser,UserProfile
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse
+from cart.models import Wishlist
+from django.contrib import messages
+
 # Create your views here.
 def cart(request,total=0,quantity=0,cart_items=None):
     try:
@@ -92,3 +95,29 @@ def remove_cart_items(request,product_id):
 #     }
 #     return render(request,'user/checkout.html',context)
 
+
+
+
+def wishlist(request):
+    wishlist=Wishlist.objects.filter(user=request.user)
+    return render(request,'user/wishlist.html',{'wishlist':wishlist})
+
+
+def add_wishlist(request,id):
+    user=request.user
+    product=get_object_or_404(ProductImage,id=id)
+    wishlist=Wishlist.objects.filter(user=user)
+    if not wishlist.filter(product=product).exists():
+        Wishlist.objects.create(user=user,product=product)
+        messages.success(request,'Product added to your wishlist')
+
+    print(wishlist)
+    return redirect('product_details',category_slug=product.product.category.slug,product_slug=product.product_size.slug)
+
+def remove_wishlist(request,id):
+    user=request.user
+    product=get_object_or_404(ProductImage,id=id)
+    wishlist=Wishlist.objects.filter(user=user,product=product)
+    print(wishlist)
+    wishlist.delete()
+    return redirect ('product_details',category_slug=product.product.category.slug,product_slug=product.product_size.slug)

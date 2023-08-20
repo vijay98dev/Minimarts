@@ -15,6 +15,7 @@
           <tr>
               <th>Categories</th>
               <th>Slug</th>
+              <th>Status</th>
               <th>Action </th>
           </tr>
         </thead>
@@ -24,7 +25,16 @@
           <tr>
             <td>{{category.category_name}}</td>
             <td>{{category.slug}}</td>
-            <td><a href="{% url 'delete-category' category.id %}"><button type="button" class="btn btn-danger btn-sm">Delete</button></a>/<a href="{% url 'edit-category' category.id %}"><button type="button" class="btn btn-info btn-sm">Edit</button></a></td>
+            <td>{% if category.is_available %}
+              <span class="badge badge-success rounded-pill d-inline text-black-50 text-success">Active</span>
+              {% else %}
+              <span class="badge badge-danger rounded-pill d-inline text-black-50 text-danger">Blocked</span>
+              {% endif %}</td>
+            {% if category.is_available  %}
+            <td><a href="{% url 'block-category' category.id %}"><button type="button" class="btn btn-danger btn-sm">Block</button></a>/<a href="{% url 'edit-category' category.id %}"><button type="button" class="btn btn-info btn-sm">Edit</button></a></td>
+             {% else %}
+             <td><a href="{% url 'unblock-category' category.id %}"><button type="button" class="btn btn-success btn-sm">Unblock</button></a>/<a href="{% url 'edit-category' category.id %}"><button type="button" class="btn btn-info btn-sm">Edit</button></a</td>
+            {% endif %}
           </tr>
           {% endfor %}
          

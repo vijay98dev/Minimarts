@@ -13,7 +13,9 @@
             <aside class="col-md-6">
     <article class="gallery-wrap"> 
         <div class="img-big-wrap">
+            <div class="magnify"> 
            <a href="#"><img src="{{single_product.product_image.url}}"></a>
+            </div>
         </div> <!-- img-big-wrap.// -->
         
     </article> <!-- gallery-wrap .end// -->
@@ -77,7 +79,14 @@
             <a href="{% url 'cart' %}" class="btn  btn-outline-primary "> <span class="text">View Cart</span> <i class="fas fa-eye"></i>  </a>
             
             {% else %}  
-              <button type="submit" class="btn  btn-primary"> <span class="text">Add to Cart</span> <i class="fas fa-shopping-cart"></i>  </button>
+              <button type="submit" class="btn btn-sm  btn-primary"> <span class="text">Add to Cart</span> <i class="fas fa-shopping-cart"></i>  </button>
+              &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+              {% if single_product.in_wishlist %}
+              <a href="{% url 'add-wishlist' single_product.id %}" class="btn btn-sm btn-primary">Add to wishlist</a>
+              {% else %}
+              
+              <a href="{% url 'remove-wishlist' single_product.id %}" class="btn btn-sm btn-primary">Remove form wishlist</a>
+              {% endif %}
             {% endif %}
           
           {% endif %}

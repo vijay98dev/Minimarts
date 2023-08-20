@@ -9,7 +9,7 @@
         <div class="card-body">
             <h4 class="card-title mb-4">Category</h4>
             {% include 'include/alerts.html' %}
-                <form action="{% url 'add-category' %}" method="POST">
+                <form action="{% url 'edit-category' category.id %}" method="POST">
                     {% csrf_token %}
                     <div class="mb-3">
                         <label for="exampleInputEmail1" class="form-label">Category</label>

@@ -79,10 +79,23 @@ def categories(request):
     }
     return render(request,'admin/category.html',context)
 
-def delete_category(request,id):
+def unblock_category(request,id):
     category=get_object_or_404(Category,pk=id)
-    category.delete()
+    category.unblock()
+    category.save
     return redirect('categories')
+
+def block_category(request,id):
+    category=get_object_or_404(Category,pk=id)
+    category.block()
+    category.save
+    return redirect('categories')
+
+
+# def delete_category(requset,id):
+#     category=get_object_or_404(Category,pk=id)
+#     category.delete()
+#     return redirect('categories')
 
 def add_category(request):
     if request.method=='POST':
@@ -90,8 +103,8 @@ def add_category(request):
         description=request.POST['description']
         slug=slugify(category_name)
         if Category.objects.filter(category_name=category_name).exists():
-            error_message = 'Category name already exists.'
-            return render(request, 'admin/add-category.html', {'error_message': error_message})
+            messages.error(request,'Category already exist')
+            return redirect ('add-category')
         else:
             category = Category(category_name=category_name,description=description,slug=slug)
             category.save()
@@ -99,23 +112,28 @@ def add_category(request):
     return render(request, "admin/add-category.html")
 
 
-def edit_category(request,id):
-    categories=Category.objects.get(pk=id)
-    if request.method=='POST':
-        category_name=request.POST.get('category')
-        description=request.POST.get('description')
-        slug=slugify(category_name)
-        if Category.objects.filter(category_name=category_name).exclude(pk=id).exists():
-            messages.error(request,'Category name already exists')
-            return redirect('categories')
+def edit_category(request, id):
+    categories = get_object_or_404(Category, pk=id)
+    
+    if request.method == 'POST':
+        category_name = request.POST.get('category_name')
+        description = request.POST.get('description')
+        slug = slugify(category_name)
+        
+        # Check if category_name has changed and if it's not already taken
+        if categories.category_name != category_name and Category.objects.filter(category_name=category_name).exists():
+            messages.error(request, 'Category name already exists')
         else:
             categories.category_name = category_name
             categories.description = description
             categories.slug = slug
             categories.save()
+            messages.success(request, 'Category changed successfully')
+        
         return redirect('categories')
-    context={'category':categories}
-    return render(request,'admin/edit-category.html',context)
+    
+    context = {'category': categories}
+    return render(request, 'admin/edit-category.html', context)
 
 def product(request):
     product=Product.objects.all()

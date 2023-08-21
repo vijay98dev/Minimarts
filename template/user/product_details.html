@@ -22,7 +22,7 @@
             </aside>
             <main class="col-md-6 border-left">
 
-    <form action="{% url 'add_cart' single_product.id %}" method="post">
+    <form action="" method="post">
 {% csrf_token %}
 
       <article class="content-body">
@@ -85,7 +85,7 @@
               <a href="{% url 'add-wishlist' single_product.id %}" class="btn btn-sm btn-primary">Add to wishlist</a>
               {% else %}
               
-              <a href="{% url 'remove-wishlist' single_product.id %}" class="btn btn-sm btn-primary">Remove form wishlist</a>
+              <a href="" class="btn btn-sm btn-primary">Remove form wishlist</a>
               {% endif %}
             {% endif %}
           

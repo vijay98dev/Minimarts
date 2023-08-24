@@ -59,14 +59,17 @@
           <div class="row">
               <div class="item-option-select">
                   <h6>Select Size</h6>
+                  
                   <select class="form-control text-black" id="size" name="size" required>
                     <option  value="" disabled selected>Select a Size</option>  
-                    <option value="7">7</option>
-                    <option value="7.5">7.5</option>
+                    {% for product in data %}
+                    <option value="{{product.id}}">{{product.product_size}}</option>
+                    {% endfor %}
+                    {% comment %} <option value="7.5">7.5</option>
                     <option value="8">8</option>
                     <option value="8.5">8.5</option>
                     <option value="9">9</option>
-                    <option value="10">10</option>
+                    <option value="10">10</option> {% endcomment %}
                 </select>
               </div>
           </div> <!-- row.// -->

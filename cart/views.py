@@ -49,7 +49,11 @@ def add_cart(request,product_id):
 
     try:
         cart_item=CartItems.objects.get(product=product,cart=cart)
-        cart_item.quantity += 1
+        if cart_item.quantity<product.product_size.stock:
+            cart_item.quantity += 1
+        else:
+            cart_item.quantity=product.product_size.stock
+            messages.error(request,'Product has reached its maximum stock')
         cart_item.save()
     except CartItems.DoesNotExist:
         cart_item=CartItems.objects.create(product=product,quantity=1,cart=cart)

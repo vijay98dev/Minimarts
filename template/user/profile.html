@@ -20,7 +20,7 @@
                   <div class="card" style="text-align: center">
                     <div class="card-body">
                       <img
-                        src="profile profile_image"
+                        src="{{ profile.profile_image.url}}"
                         alt="User Profile Picture"
                         width="50"
                         height="50"
@@ -80,7 +80,7 @@
               <img
                 class="rounded-circle mt-5"
                 width="150px"
-                src=""
+                src="{{ profile.profile_image.url}}"
               />
               <span class="font-weight-bold">{{user_profile.user.name}}</span>
               <span class="text-black-50">{{user_profile.user.phone_number}}</span>
@@ -89,6 +89,7 @@
             </div>
             {% comment %} {% endif %}
             {% endfor %} {% endcomment %}
+            {% include 'include/alerts.html' %}
           </div>
         </div>
       </div>

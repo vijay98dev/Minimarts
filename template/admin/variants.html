@@ -37,7 +37,7 @@
       </table>
       {% include 'include/alerts.html' %}
 
-      <a href="{% url 'add-variant' id=product.id %}" class="btn btn-primary btn-sm mt-4">Add Variant</a>
+      <a href="{% url 'add-variant' product.id %}" class="btn btn-primary btn-sm mt-4">Add Variant</a>
       <a href="{% url 'product' %}" class="btn btn-secondary btn-sm mt-4">Back</a>
     </div>
     <!-- card-body.// -->

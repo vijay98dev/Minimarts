@@ -102,18 +102,20 @@ def add_address(request):
         state=request.POST.get('state')
         country=request.POST.get('country')
         pin_code=request.POST.get('pin_code')
-
-
-        profile=UserProfile(user=user)
-        profile.address=address
-        profile.street=street
-        profile.city=city
-        profile.state=state
-        profile.country=country
-        profile.pin_code=pin_code
-        profile.save()
-        messages.success(request,'Address saved successfull')
-        return redirect('profile')
+        if len(pin_code)==6:
+            profile=UserProfile(user=user)
+            profile.address=address
+            profile.street=street
+            profile.city=city
+            profile.state=state
+            profile.country=country
+            profile.pin_code=pin_code
+            profile.save()
+            messages.success(request,'Address saved successfull')
+            return redirect('profile')
+            print(profile)
+        else:
+            messages.error(request,'Enter a valid address')
     return render(request,'user/add-address.html')
 
 def address(request):

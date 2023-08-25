@@ -14,7 +14,7 @@ class Product(models.Model):
     
 
 class ProductSize(models.Model):
-    product_size=models.FloatField(max_length=5,unique=True,blank=False)
+    product_size=models.FloatField(max_length=5,blank=False)
     price=models.IntegerField()
     stock=models.IntegerField()
     is_available=models.BooleanField(default=True)
@@ -31,8 +31,9 @@ class ProductSize(models.Model):
         self.save()
 
     def save(self, *args, **kwargs):
-        self.slug = slugify(f"{self.product.product_name} {self.product_size}")
-        super().save(*args, **kwargs)
+        if not self.slug:
+            self.slug = slugify(f"{self.product.product_name} {self.product_size}")
+        return super().save(*args, **kwargs)
 
 
     def get_id(self):

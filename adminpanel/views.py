@@ -1,5 +1,6 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from django.contrib.auth import authenticate,login,logout
+from django.urls import reverse
 from account.models import CustomUser
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -163,7 +164,7 @@ def add_product(request):
             # product.save()
             size_product=ProductSize.objects.create(price=price,stock=stock,product_size=size,product=product)
             # size_product.save()
-            # print(size_product)
+            print(size_product)
             for images in uploaded_image:
                 images=ProductImage.objects.create(product_image=images,product=product,product_size=size_product)
                 # images.save()
@@ -185,18 +186,10 @@ def delete_product(request,id):
 def edit_product(request,id):
     product=Product.objects.get(pk=id)
     if request.method=='POST':
-        name=request.POST.get('product_name')
         description=request.POST.get('description')
-        category=request.POST.get('category')
-        if Product.objects.filter(product_name=name).exclude(pk=id).exists:
-            messages.error(request,'Product name already exists')
-            return redirect('product')
-        else:
-            product.product_name=name
-            product.description=description
-            product.category=category
-            product.save()
-            return redirect('product')
+        product.description=description
+        product.save()
+        return redirect('product')
     categories=Category.objects.all()
     context={
         'categories':categories,
@@ -207,6 +200,7 @@ def edit_product(request,id):
 def variant(request,id):
     variant= ProductSize.objects.filter(product=id)
     product=get_object_or_404(Product,pk=id)
+    print(product)
 
     context={
         'variants':variant,
@@ -215,25 +209,54 @@ def variant(request,id):
     return render(request,'admin/variants.html',context)
 
 def add_variant(request,id):    
-    product=Product.objects.get(pk=id)
-    variant=get_object_or_404(ProductSize,product=id)
+    product=get_object_or_404(Product,pk=id)
     if request.method=='POST':
         size= float(request.POST.get('size'))
+        print(size)
         price=float(request.POST.get('price'))
+        print(price)
         stock=int(request.POST.get('stock'))
-        # if ProductSize.objects.filter(product_size=variant.product_size).exists():
-        #     messages.error(request,'Size already exists')
-        #     return redirect('add-product')
-        # else:
-        size_product=ProductSize.objects.create(price=price,stock=stock,product_size=size,product=product)
-        messages.success(request,'Product added successfully')
-        return redirect('product')
-            
+        print(stock)
+        existing_size=ProductSize.objects.filter(product=product, product_size=size).first()
+        if existing_size:
+            messages.error(request,'Size already exists')
+            # return redirect(reverse('add-variant',args=[product.id]))
+        else:
+            size_product=ProductSize.objects.create(price=price,stock=stock,product_size=size,product=product)
+            messages.success(request,'Variant added successfully')
+            return redirect(reverse('add-variant',args=[product.id]))
     context={
-        'variants':variant
-    }
+        'product':product
 
+    }
     return render(request,'admin/add-variant.html',context)
+
+# def add_variant(request, id):
+#     product = Product.objects.get(pk=id)
+    
+#     if request.method == 'POST':
+#         sizes = request.POST.getlist('size')
+#         prices = request.POST.getlist('price')
+#         stocks = request.POST.getlist('stock')
+        
+#         for size, price, stock in zip(sizes, prices, stocks):
+#             # Check if a ProductSize object with the same size and product already exists
+#             if ProductSize.objects.filter(size=size, product=product).exists():
+#                 messages.error(request, f"A variant with size {size} already exists for this product.")
+#             else:
+#                 # Create ProductSize object if no duplicate size found
+#                 size_product = ProductSize.objects.create(
+#                     size=size, price=float(price), stock=int(stock), product=product
+#                 )
+        
+#         messages.success(request, 'Variants added successfully')
+#         return redirect(reverse('add-variant', args=[product.id]))
+    
+#     context = {
+#         'product': product
+#     }
+#     return render(request, 'admin/add-variant.html', context)
+
 
 
 def edit_variant(request,id):

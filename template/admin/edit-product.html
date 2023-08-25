@@ -13,52 +13,21 @@
                         {% csrf_token %}
                         <div class="form-group">
                             <label for="name">Product Name:</label>
-                            <input type="text" class="form-control" id="name" name="product_name" value='{{products.product_name}}' required>
+                            <input type="text" class="form-control" id="name" name="product_name" value='{{products.product_name}}' readonly>
                         </div>
                         <div class="form-group">
                             <label for="description">Description:</label>
-                            <textarea name="description" class="form-control" rows="4" required value='{{products.description}}'></textarea>
+                            <textarea name="description" class="form-control" rows="4"  value='{{products.description}}'></textarea>
                         </div>
-                        {% comment %} <div class="form-group">
-                            <label for="stock">Stock:</label>
-                            <input type="number" class="form-control" id="stock" name="stock" required value="{{product.stock}}">
-                        </div> {% endcomment %}
-                        {% comment %} <div class="form-group">
-                            <label for="size">Size:</label>
-                            <select class="form-control text-black" id="size" name="size" required>
-                                <option  value="{{product.product_size}}" disabled selected>Select a Size</option>
-                                <option value="7">7</option>
-                                <option value="7.5">7.5</option>
-                                <option value="8">8</option>
-                                <option value="8.5">8.5</option>
-                                <option value="9">9</option>
-                                <option value="10">10</option>
-                            </select>
-                        </div> 
-                        <div class="form-group">
-                            <label for="price">Price:</label>
-                            <input type="number" class="form-control" id="price" name="price" step="0.01" required value='{{product.price}}'>
-                        </div> {% endcomment %}
                         <div class="form-group">
                             <label for="category">Category:</label>
-                            <select class="form-control text-black" id="category" name="category" required>
+                            <select class="form-control text-black" id="category" name="category" readonly>
                                 <option value="" disabled selected>{{products.category}}</option>
                                 {% for category in categories %}
                                     <option value="{{ category.id }}">{{ category.category_name }}</option>
                                 {% endfor %}
                             </select>
                         </div>
-                        {% comment %} <div class="form-group">
-                            <label for="price">Is_available:</label>
-                            
-                            <input type="checkbox" class="form-control" id="price" name="availablity" step="0.01" required>
-                        </div> {% endcomment %}
-
-                        
-                        {% comment %} <div class="form-group">
-                            <label for="image">Product Image:</label>
-                            <input type="file" class="form-control" id="image" name="image" accept="image/*" required multiple value='{{product.product_image}}'>
-                        </div> {% endcomment %}
                         <div class="text-center"> <!-- Center the form -->
                             <button type="submit" class="btn btn-sm btn-primary mt-4">Submit</button>
                             <a href="{% url 'product' %}" class="btn btn-sm btn-secondary mt-4">Cancel</a>

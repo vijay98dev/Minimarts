@@ -62,8 +62,8 @@
                   
                   <select class="form-control text-black" id="size" name="size" required>
                     <option  value="" disabled selected>Select a Size</option>  
-                    {% for product in data %}
-                    <option value="{{product.id}}">{{product.product_size}}</option>
+                    {% for d in size  %}
+                    <option value="{{ d.id }}">{{ d.product_size }}</option>
                     {% endfor %}
                     {% comment %} <option value="7.5">7.5</option>
                     <option value="8">8</option>

@@ -76,7 +76,7 @@ class UserProfile(models.Model):
     state = models.CharField( max_length=100)
     country = models.CharField( max_length=100)
     pin_code = models.CharField(max_length=10)
-    profile_image=models.ImageField(upload_to='photo/profile-image', max_length=None,null=True)
+    profile_image=models.ImageField(upload_to='photo/profile-image', max_length=None,null=True,default='C:/Users/DELL/OneDrive/Desktop/Miniproject/minimart/minimart/static/admin/assets/img/avatars/5.png')
     
 
     def __str__(self):

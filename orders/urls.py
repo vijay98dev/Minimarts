@@ -4,6 +4,7 @@ from orders import views
 
 urlpatterns = [
     path('checkout/',views.checkout,name='checkout'),
-    path('place_order/',views.place_order,name='place_order'),
+    path('payment-confirmation/',views.payment_confirmation,name='payment-confirmation'),
+    # path('place_order/',views.place_order,name='place_order'),
     path('confirmation/',views.confirmation,name='confirmation'),
 ]

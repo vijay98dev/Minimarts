@@ -64,16 +64,10 @@
     <div class="row">
       <!-- Sidebar Card -->
   
-      {% comment %} {% include 'inc/sidebar.html' %} {% endcomment %}
-  
       <!-- User Profile Card -->
       <div class="col-md-9">
         <div class="card">
           <div class="card-body">
-              {% comment %} {% for user_profile in user_profile %}
-              {% if forloop.first %} {% endcomment %}
-  
-  
             <div
               class="d-flex flex-column align-items-center text-center p-3 py-5"
             >
@@ -87,8 +81,6 @@
               <span class="text-black-50">{{user_profile.user.email}}</span>
               <!-- Additional content here if needed -->
             </div>
-            {% comment %} {% endif %}
-            {% endfor %} {% endcomment %}
             {% include 'include/alerts.html' %}
           </div>
         </div>

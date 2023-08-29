@@ -314,8 +314,10 @@ def delete_variant(request,id):
 
 def product_image(request,id):
     images=ProductImage.objects.filter(product_size=id)
+    product=ProductSize.objects.filter(id=id)
     context={
-        'image':images
+        'image':images,
+        'product':product,
     }
     return render(request,'admin/product-image.html',context)
 

@@ -2,50 +2,63 @@
 {% load static %} 
 {% block titile %}Wishlist{% endblock titile %}
 {% block content %}
-<div class="mt-5 mb-5" style="padding-left: 100px;">
+<br>
+<section class="section-conten padding-y bg" style="padding-top: 20px">
+  <div class="container">
     <div class="row">
       {% include 'include/sidebar.html' %}
   
-      <div class="col-md-9">
-        <h4 class="card-title" style=""><b>Wishlist</b></h4>
-        {% for data in profile %}
-  
-        <div class="card">
-          <div class="p-3 py-5">
-            <div class="col-12"></div>
-  
-            <div class="col">
-                <thead>
-                    <tr>
-                        <th>Product Image</th>
-                        <th>Product Name</th>    
-                        <th>Price</th>    
-                        <th>Size</th>
-                        <th>Action</th>
+  <!-- ============================ COMPONENT LOGIN   ================================= -->
+  <div class="card mx-auto" style="max-width: 800px; margin-top: 100px">
+    
+    <div class="card-body flex-grow">
+      <h4 class="card-title mb-4">Wishlist</h4>
+      {% include 'include/alerts.html' %}
+      <table class="table table-sm">
+        {% if wishlist %}
+        <thead>
+          <tr>
+            <th>Product Image</th>
+            <th>Product Name</th>    
+            <th>Price</th>    
+            <th>Size</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
           
-                    </tr>
-                  </thead>
-                  <tbody>
-                      {% for wishlist in wishlist %}
-                    <tr>
-                      <td>{{wishlist.product.product_image}}</td> 
-                      <td>{{wishlist.product.product.product_name}}</td> 
-                      <td>{{wishlist.product.product_size.price}}</td> 
-                      <td>{{wishlist.product.product_size.size}}</td>
-                      <td><a href="{% url 'variants' wishlist.product.id %}"><button type="button" class="btn btn-danger btn-sm">Remove </button></a></td>
-                      {% comment %} <td><a href="{% url 'delete-product' id=product.id %}"><button type="button" class="btn btn-danger btn-sm">Delete</button></a>/<a href="{% url 'edit-product' product.id %}"><button type="button" class="btn btn-info btn-sm">Edit</button></a></td> {% endcomment %}
-                    </tr>
-                    {% endfor %}
-                   
-                  </tbody>
-                </table>
-            </div>
-            <a href="{% url 'edit-address' data.id %}" class="btn btn-info btn-sm">Edit</a>
-            <a href="{% url 'delete-address' data.id %}" class="btn btn-danger btn-sm">Delete</a>
-          </div>
-        </div>
-        <br />
+          {% for wishlist in wishlist %}
+        <tr>
+          <td><a href="{% url 'product_details' wishlist.product.product.category.slug wishlist.product.slug %}"><img src="{{ product_image.product_image.url }}" alt="{{ product_image.product_size.product.product_name }}" class="product-image" style="width:40px"></a></td> 
+          <td><a href="{% url 'product_details' wishlist.product.product.category.slug wishlist.product.slug %}">{{wishlist.product.product.product_name}}</a></td> 
+          <td>{{wishlist.product.price}}</td> 
+          <td>{{wishlist.product.product_size}}</td>
+          <td><a href="{% url 'remove-wishlist' wishlist.product.id %}"><button type="button" class="btn btn-danger btn-sm">Remove </button></a></td>
+          {% comment %} <td><a href="{% url 'delete-product' id=product.id %}"><button type="button" class="btn btn-danger btn-sm">Delete</button></a>/<a href="{% url 'edit-product' product.id %}"><button type="button" class="btn btn-info btn-sm">Edit</button></a></td> {% endcomment %}
+        </tr>
         {% endfor %}
-      </div>
+        {% else %}
+        <h3>Your Wishlist is Empty<h3>
+          <br>
+        <p>Add Products you wish to purchase</p>
+        <br>
+        <a href="{% url 'store' %}" class="btn btn-primary-light btn-sm">Products</a>
+        {% endif %}
+      </tbody>
+      </table>
+    
+
+      {% comment %} <a href="{% url 'add-variant' product.id %}" class="btn btn-primary btn-sm mt-4">Add Variant</a>
+      <a href="{% url 'product' %}" class="btn btn-secondary btn-sm mt-4">Back</a> {% endcomment %}
     </div>
-  </div>{% endblock content %}
+    <!-- card-body.// -->
+  </div>
+  <!-- card .// -->
+
+  <!-- ============================ COMPONENT LOGIN  END.// ================================= -->
+</div>
+<!-- row .// -->
+</div>
+<!-- container .// -->
+</section>
+{% endblock content %}

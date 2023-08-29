@@ -18,7 +18,7 @@ class Cart(models.Model):
 
 class CartItems(models.Model):
     cart=models.ForeignKey("cart.Cart",on_delete=models.CASCADE)
-    product=models.ForeignKey("store.ProductImage",on_delete=models.CASCADE)
+    product=models.ForeignKey("store.ProductSize",on_delete=models.CASCADE)
     quantity=models.PositiveIntegerField(default=0)
 
 
@@ -27,9 +27,9 @@ class CartItems(models.Model):
     
 
     def sub_total(self):
-        return self.product.product_size.price * self.quantity
+        return self.product.price * self.quantity
     
     
 class Wishlist(models.Model):
     user=models.ForeignKey("account.CustomUser",  on_delete=models.CASCADE)
-    product=models.ForeignKey("store.ProductImage", on_delete=models.CASCADE)
+    product=models.ForeignKey("store.ProductSize", on_delete=models.CASCADE)

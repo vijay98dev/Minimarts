@@ -16,7 +16,7 @@ def cart(request,total=0,quantity=0,cart_items=None):
         cart=Cart.objects.get(cart_id=_cart_id(request))
         cart_items=CartItems.objects.filter(cart=cart)
         for cart_item in cart_items:
-            total+=(cart_item.product.product_size.price * cart_item.quantity)
+            total+=(cart_item.product.price * cart_item.quantity)
             quantity+=cart_item.quantity
         tax=(5*total)/100
         grand_total=total+tax
@@ -38,21 +38,22 @@ def _cart_id(request):
     return cart
 
 def add_cart(request,product_id):
-    size=request.POST.get('size')
-    
-    product=ProductImage.objects.get(id=product_id)     
+    product=ProductSize.objects.get(id=product_id)
+    if request.method=='POST':
+        size=request.POST.get('size')
+        print(size)
+         
     try:
         cart=Cart.objects.get(cart_id=_cart_id(request))
     except Cart.DoesNotExist:
         cart=Cart.objects.create(cart_id=_cart_id(request),user=request.user)
     cart.save()
-
     try:
         cart_item=CartItems.objects.get(product=product,cart=cart)
-        if cart_item.quantity<product.product_size.stock:
+        if cart_item.quantity<product.stock:
             cart_item.quantity += 1
         else:
-            cart_item.quantity=product.product_size.stock
+            cart_item.quantity=product.stock
             messages.error(request,'Product has reached its maximum stock')
         cart_item.save()
     except CartItems.DoesNotExist:
@@ -71,7 +72,7 @@ def add_cart(request,product_id):
 
 def remove_cart(request,product_id):
     cart=Cart.objects.get(cart_id=_cart_id(request))
-    product=get_object_or_404(ProductImage,id=product_id)
+    product=get_object_or_404(ProductSize,id=product_id)
     cart_item=CartItems.objects.get(product=product,cart=cart)
     if cart_item.quantity > 1:
         cart_item.quantity-=1
@@ -82,46 +83,43 @@ def remove_cart(request,product_id):
 
 def remove_cart_items(request,product_id):
     cart=Cart.objects.get(cart_id=_cart_id(request))
-    product=get_object_or_404(ProductImage,id=product_id)
+    product=get_object_or_404(ProductSize,id=product_id)
     cart_item=CartItems.objects.get(product=product,cart=cart)
     cart_item.delete()
     return redirect('cart')
-
-# def checkout(request):
-#     user=request.user
-#     address=UserProfile.objects.filter(user=user)
-#     print(address)
-#     cart_items=CartItems.objects.filter(cart__user=user)
-#     context={
-#         'user':user,
-#         'address':address,
-#         'cart_items':cart_items,
-#     }
-#     return render(request,'user/checkout.html',context)
-
 
 
 
 def wishlist(request):
     wishlist=Wishlist.objects.filter(user=request.user)
-    return render(request,'user/wishlist.html',{'wishlist':wishlist})
+    product=ProductSize.objects.filter(id__in=wishlist.values('product'))
+    print(product)
+    product_image=ProductImage.objects.filter(product_size__in=product.values('id')).first()
+    if product_image:
+        print(product_image.id)
+    
+    context={
+        'wishlist':wishlist,
+        'product_image':product_image,
+    }
+    return render(request,'user/wishlist.html',context)
 
 
 def add_wishlist(request,id):
     user=request.user
-    product=get_object_or_404(ProductImage,id=id)
+    product=get_object_or_404(ProductSize,id=id)
     wishlist=Wishlist.objects.filter(user=user)
-    if not wishlist.filter(product=product).exists():
+    if not wishlist.filter(user=user,product=product).exists():
         Wishlist.objects.create(user=user,product=product)
         messages.success(request,'Product added to your wishlist')
+        return redirect('wishlist')
 
-    print(wishlist)
-    return redirect('product_details',category_slug=product.product.category.slug,product_slug=product.product_size.slug)
+    return redirect('product_details',category_slug=product.product.category.slug,product_slug=product.slug)
 
 def remove_wishlist(request,id):
     user=request.user
-    product=get_object_or_404(ProductImage,id=id)
+    product=get_object_or_404(ProductSize,id=id)
     wishlist=Wishlist.objects.filter(user=user,product=product)
-    print(wishlist)
     wishlist.delete()
-    return redirect ('product_details',category_slug=product.product.category.slug,product_slug=product.product_size.slug)
+    messages.info(request,'Product removed from wishlist')
+    return redirect ('wishlist')

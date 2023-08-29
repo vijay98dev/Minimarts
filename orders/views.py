@@ -2,7 +2,8 @@ from django.shortcuts import render,redirect,get_object_or_404
 from cart.models import Cart,CartItems
 from account.models import UserProfile
 from orders.models import Order,OrderProduct
-
+import razorpay
+from django.conf import settings
 
 # Create your views here.
 
@@ -21,11 +22,13 @@ def checkout(request,total=0,quantity=0):
     grand_total=0
     tax=0
     for cart_item in cart_items:
-        total+=(cart_item.product.product_size.price * cart_item.quantity)
+        total+=(cart_item.product.price * cart_item.quantity)
         quantity+=cart_item.quantity
     tax=(5*total)/100
     grand_total = total+tax
     address=UserProfile.objects.filter(user=user)
+    # client=razorpay.Client(auth=(settings.razor_pay_key_id,settings.key_secret))
+    # payment=client.order.create({'amount'})
     context={
         'address':address,
         'cart_item':cart_items,
@@ -36,11 +39,14 @@ def checkout(request,total=0,quantity=0):
     }
     return render(request,'user/checkout.html',context)
 
+def payment_confirmation(request):
+    return render(request,'user/payment-confirmation.html')
+
 
 def confirmation(request):
     return render (request,'user/confirmation.html')
 
-def place_order(request):
+# def place_order(request):
     # if request.method == 'POST':
     #     address_id=request.POST.get('address')
     #     payment_method=request.POST.get('pay-method')
@@ -74,4 +80,4 @@ def place_order(request):
     #     'payment_method':payment_method,
     #     'order_id':order.order_id,
     #     }
-    return render (request,'user/confirmation.html')
+    # return render (request,'user/confirmation.html')

@@ -40,7 +40,7 @@
                 <div class="aside"><img src="{{cart_item.product.product_image.url}}" class="img-sm"  ></div>
                 <figcaption class="info">
                     <a href="{{ cart_item.product.get_url }}" class="title text-dark">{{cart_item.product.product.product_name}}</a>
-                    <p class="text-muted small">Size:{{cart_item.product.product_size.product_size}}<br> Brand: NIKE</p>
+                    <p class="text-muted small">Size:{{cart_item.product.product_size}}<br> Brand: NIKE</p>
                 </figcaption>
             </figure>
         </td>
@@ -61,7 +61,7 @@
         <td> 
             <div class="price-wrap"> 
                 <var class="price">₹{{cart_item.sub_total}}</var> 
-                <small class="text-muted"> ₹{{cart_item.product.product_size.price}} each </small> 
+                <small class="text-muted"> ₹{{cart_item.product.price}} each </small> 
             </div> <!-- price-wrap .// -->
         </td>
         <td class="text-right"> 

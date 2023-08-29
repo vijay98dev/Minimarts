@@ -24,7 +24,7 @@
                     <div class="aside"><img src="{{cart_item.product.product_image.url}}" style='width:50px;height=50px'></div>
                     <figcaption class="info">
                         <p>{{cart_item.product.product.product_name}}</p>
-                        <span class="text-muted">{{cart_item.quantity}}x = $560 </span>
+                        <span class="text-muted">{{cart_item.quantity}}x = ₹{{cart_item.sub_total}} </span>
                     </figcaption>
                 </figure>
             </div> <!-- col.// -->
@@ -32,35 +32,8 @@
         {% endfor %}
     </div> <!-- card-body.// -->
     </article> <!-- card.// -->
-    
-    
-    {% comment %} <article class="card mb-4">
-    <div class="card-body">
-        <h4 class="card-title mb-4">Contact info</h4>
-        <form action="">
-            <div class="row">
-                <div class="form-group col-sm-6">
-                    <label>Frst name</label>
-                    <input type="text" placeholder="Type here" class="form-control">
-                </div>
-                <div class="form-group col-sm-6">
-                    <label>Last name</label>
-                    <input type="text" placeholder="Type here" class="form-control">
-                </div>
-                <div class="form-group col-sm-6">
-                    <label>Phone</label>
-                    <input type="text" value="+998" class="form-control">
-                </div>
-                <div class="form-group col-sm-6">
-                    <label>Email</label>
-                    <input type="email" placeholder="example@gmail.com" class="form-control">
-                </div>
-            </div> <!-- row.// -->	
-        </form>
-    </div> <!-- card-body.// -->
-    </article> <!-- card.// --> {% endcomment %}
-    
-    
+
+
     <article class="card mb-4">
     <div class="card-body">
         <h4 class="card-title mb-4">Delivery info</h4>
@@ -70,68 +43,21 @@
                 <label class="form-check-label" for="exampleRadios1">
                     <div class="card-radio text-truncate p-3">
                         <span class="fs-14 mb-4 d-block"
-                          >Address {{ forloop.counter }}</span
-                        >
-                        {% comment %} <span class="fs-14 mb-2 d-block">
-                          {{.name}}
-                        </span>
+                          >Address {{ forloop.counter }}</span>
                         <span
                           class="text-muted fw-normal text-wrap mb-1 d-block"
-                          >{{user_profile.phone_number}}</span
-                        > {% endcomment %}
+                          >{{data.address}}</span>
                         <span
                           class="text-muted fw-normal text-wrap mb-1 d-block"
-                          >{{data.address}}</span
-                        >
+                          >{{data.country}},{{data.state}}</span>
                         <span
                           class="text-muted fw-normal text-wrap mb-1 d-block"
-                          >{{data.country}},{{data.state}}</span
-                        >
-                        <span
-                          class="text-muted fw-normal text-wrap mb-1 d-block"
-                          >{{data.street}},{{data.pin_code}}</span
-                        >
+                          >{{data.street}},{{data.pin_code}}</span>
                       </div>
                 </label>
               </div>
-              
-    
-            {% comment %} <div class="row">
-                    <div class="form-group col-sm-6">
-                        <label>Country*</label>
-                        <select name="" class="form-control">
-                            <option value="">India</option>
-                            <option value="">United States</option>
-                            <option value="">France</option>
-                            <option value="">Italy</option>
-                        </select>
-                    </div>
-                    <div class="form-group col-sm-6">
-                        <label>State*</label>
-                        <input type="text" placeholder="Type here" class="form-control">
-                    </div>
-                    <div class="form-group col-sm-8">
-                        <label>Street*</label>
-                        <input type="text" placeholder="Type here" class="form-control">
-                    </div>
-                    <div class="form-group col-sm-4">
-                        <label>Building</label>
-                        <input type="text" placeholder="" class="form-control">
-                    </div>
-                    <div class="form-group col-sm-4">
-                        <label>House</label>
-                        <input type="text" placeholder="Type here" class="form-control">
-                    </div>
-                    <div class="form-group col-sm-4">
-                        <label>Postal code</label>
-                        <input type="text" placeholder="" class="form-control">
-                    </div>
-                    <div class="form-group col-sm-4">
-                        <label>Zip</label>
-                        <input type="text" placeholder="" class="form-control">
-                    </div>
-            </div> <!-- row.// -->	 {% endcomment %}
             {% endfor %}
+            <a href="{% url 'add-address' %}?source=checkout" class="btn btn-primary btn-sm">Add Address</a>
     </div> <!-- card-body.// -->
     </article> <!-- card.// -->
     
@@ -139,7 +65,8 @@
     <article class="accordion" id="accordion_pay">
         <div class="card">
             <header class="card-header">
-                <img src="./images/misc/payment-paypal.png" class="float-right" height="24"> 
+
+                <img src="{% static './images/misc/payment-paypal.png' %}" class="float-right" height="24"> 
                 <label class="form-check collapsed" data-toggle="collapse" data-target="#pay_paynet">
                     <input class="form-check-input" name="payment-option" checked type="radio" value="option2">
                     <h6 class="form-check-label"> 
@@ -151,7 +78,7 @@
             <div class="card-body">
                 <p class="text-center text-muted">Connect your PayPal account and use it to pay your bills. You'll be redirected to PayPal to add your billing information.</p>
                 <p class="text-center">
-                    <a href="#"><img src="./images/misc/btn-paypal.png" height="32"></a>
+                    <button id="rzp-button1"><img src="{% static './images/misc/btn-paypal.png' %}" height="32"></button>
                     <br><br>
                 </p>
             </div> <!-- card body .// -->
@@ -159,7 +86,7 @@
         </div> <!-- card.// -->
         <div class="card">
         <header class="card-header">
-            <img src="./images/misc/payment-card.png" class="float-right" height="24">  
+            <img src="{% static './images/misc/payment-card.png' %}" class="float-right" height="24">  
             <label class="form-check" data-toggle="collapse" data-target="#pay_payme">
                 <input class="form-check-input" name="payment-option" type="radio" value="cod">
                 <h6 class="form-check-label"> Cash on Delivery </h6>
@@ -168,13 +95,6 @@
         <div id="pay_payme" class="collapse" data-parent="#accordion_pay">
             <div class="card-body">
                 <p class="alert alert-success">For special offer select Paypal</p>
-                {% comment %} <form class="form-inline">
-                    <input type="text" class="form-control mr-2" placeholder="xxxx-xxxx-xxxx-xxxx" name="">
-                    <input type="text" class="form-control mr-2" style="width: 100px"  placeholder="dd/yy" name="">
-                    <input type="number" maxlength="3" class="form-control mr-2"  style="width: 100px"  placeholder="cvc" name="">
-                    <button class="btn btn btn-success">Button</button>
-                </form> {% endcomment %}
-                
             </div> <!-- card body .// -->
         </div> <!-- collapse .// -->
         </div> <!-- card.// -->
@@ -200,9 +120,9 @@
                 </dl>
                 <hr>
                 <p class="text-center mb-3">
-                    <img src="./images/misc/payments.png" height="26">
+                    <img src="{% static './images/misc/payments.png' %}" height="26">
                 </p>
-                <a href="{% url 'confirmation' %}" class="btn btn-primary btn-block"> Place Order </a>
+                <a href="{% url 'payment-confirmation' %}" class="btn btn-primary btn-block"> Place Order </a>
                 
             </div> <!-- card-body.// -->
             </div> <!-- card.// -->
@@ -217,7 +137,7 @@
     </div> <!-- container .//  -->
     </section>
     <!-- ========================= SECTION CONTENT END// ========================= -->
-
+    
 
 
 

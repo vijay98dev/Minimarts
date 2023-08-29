@@ -111,8 +111,9 @@ def add_address(request):
             profile.country=country
             profile.pin_code=pin_code
             profile.save()
+            source = request.GET.get('source', 'checkout')
             messages.success(request,'Address saved successfull')
-            return redirect('profile')
+            return redirect(source)
             print(profile)
         else:
             messages.error(request,'Enter a valid address')

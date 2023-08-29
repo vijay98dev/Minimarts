@@ -22,39 +22,20 @@
             </aside>
             <main class="col-md-6 border-left">
 
-    <form action="" method="post">
+    <form action="{% url 'add_cart' single_product.product_size.id %}" method="post">
 {% csrf_token %}
 
       <article class="content-body">
       
       <h2 class="title">{{single_product.product.product_name}}</h2>
-      
       <div class="mb-3"> 
-          <var class="price h4">₹{{single_product.product_size.price}}</var> 
+          <var class="price h4">₹<span id="displayedPrice">{{single_product.product_size.price}}</span></var> 
       </div> 
-      
       <p>{{single_product.product.description}}</p>
       
       
       <hr>
           <div class="row">
-              {% comment %} <div class="item-option-select">
-                  <h6>Choose Color</h6>
-                  <div class="btn-group btn-group-sm btn-group-toggle" data-toggle="buttons">
-                    <label class="btn btn-light">
-                      <input type="radio" name="radio_color"> Silver
-                    </label>
-                    <label class="btn btn-light">
-                      <input type="radio" name="radio_color" > Gray
-                    </label>
-                    <label class="btn btn-light active">
-                      <input type="radio" name="radio_color checked"> Gold
-                    </label>
-                    <label class="btn btn-light">
-                      <input type="radio" name="radio_color"> Black
-                    </label>
-                  </div> 
-              </div> {% endcomment %}
           </div> <!-- row.// -->
           <div class="row">
               <div class="item-option-select">
@@ -63,36 +44,24 @@
                   <select class="form-control text-black" id="size" name="size" required>
                     <option  value="" disabled selected>Select a Size</option>  
                     {% for d in size  %}
-                    <option value="{{ d.id }}">{{ d.product_size }}</option>
+                    <option value="{{ d.id }}" data-price="{{ d.product_size.price }}" > {{ d.product_size }}</option>
                     {% endfor %}
-                    {% comment %} <option value="7.5">7.5</option>
-                    <option value="8">8</option>
-                    <option value="8.5">8.5</option>
-                    <option value="9">9</option>
-                    <option value="10">10</option> {% endcomment %}
                 </select>
               </div>
           </div> <!-- row.// -->
           <hr>
-          {% if single_product.product_size__stock <= 0 %}
-            <h4>Out Stock</h4>
-          {% else %}
-            {% if in_cart %}
-            <a href="#" class="btn  btn-info"> <span class="text">Added to Cart</span> <i class="fas fa-check"></i>  </a>
-            <a href="{% url 'cart' %}" class="btn  btn-outline-primary "> <span class="text">View Cart</span> <i class="fas fa-eye"></i>  </a>
-            
-            {% else %}  
-              <button type="submit" class="btn btn-sm  btn-primary"> <span class="text">Add to Cart</span> <i class="fas fa-shopping-cart"></i>  </button>
-              &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-              {% if single_product.in_wishlist %}
-              <a href="{% url 'add-wishlist' single_product.id %}" class="btn btn-sm btn-primary">Add to wishlist</a>
-              {% else %}
-              
-              <a href="" class="btn btn-sm btn-primary">Remove form wishlist</a>
-              {% endif %}
-            {% endif %}
           
-          {% endif %}
+            {% if single_product.product_size__stock <= 0 %}
+                <h4> Out Stock </h4>
+            {% else %} 
+                <button type="submit" class="btn btn-sm  btn-primary"> <span class="text">Add to Cart</span> <i class="fas fa-shopping-cart"></i>  </button>
+                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                    {% if single_product.product_size.id.in__wishlist %}
+                        <a href="{% url 'remove-wishlist' single_product.product_size.id %}" class="btn btn-sm btn-danger">Remove form wishlist</a>
+                    {% else %}
+                        <a href="{% url 'add-wishlist' single_product.product_size.id %}" class="btn btn-sm btn-primary">Add to wishlist</a>
+                    {% endif %}
+            {% endif %}
       </article> <!-- product-info-aside .// -->
 
   </form>
@@ -102,36 +71,9 @@
     <!-- ============================ COMPONENT 1 END .// ================================= -->
     
     <br>
-{% comment %}     
+
     <div class="row">
-                <div class="col-md-9">
-    
-        <header class="section-heading">
-            <h3>Customer Reviews </h3>  
-            
-        </header>
-    
-        <article class="box mb-3">
-            <div class="icontext w-100">
-                <img src="./images/avatars/avatar1.jpg" class="img-xs icon rounded-circle">
-                <div class="text">
-                    <span class="date text-muted float-md-right">24.04.2020 </span>  
-                    <h6 class="mb-1">Mike John </h6>
-                    
-                </div>
-            </div> <!-- icontext.// -->
-            <div class="mt-3">
-                <p>
-                    Dummy comment Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                    quis nostrud exercitation ullamco laboris nisi ut aliquip
-                </p>	
-            </div>
-        </article> {% endcomment %}
-    
-        
-    
-        </div> <!-- col.// -->
+                
     </div> <!-- row.// -->
     
     
@@ -139,6 +81,20 @@
     </section>
     <!-- ========================= SECTION CONTENT END// ========================= -->
 
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const sizeSelect = document.getElementById("size");
+    const displayedPrice = document.getElementById("displayedPrice");
+    const defaultPrice = parseFloat("{{single_product.product_size.price}}"); 
+
+    // Event listener to update price when size is selected
+    sizeSelect.addEventListener("change", function () {
+        const selectedOption = sizeSelect.options[sizeSelect.selectedIndex];
+        const price = parseFloat(selectedOption.getAttribute("data-price")) || defaultPrice;
+        displayedPrice.textContent =  price.toFixed(2); // Update displayed price
+    });
+});
+</script>
 
 
 {% endblock content %}

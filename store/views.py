@@ -27,15 +27,9 @@ def store(request,category_slug=None):
 def product_details(request,category_slug,product_slug):
     try:
         single_product=ProductImage.objects.get(product__category__slug=category_slug,product_size__slug=product_slug)
-        # print(single_product)
-        # data=Product.objects.all().filter(product_name=single_product.product)
-        # print(data)
-
-        # size=ProductSize.objects.filter(product=data)
-        # print(size)
         product=single_product.product
         size=ProductSize.objects.filter(product=product)
-        in_cart=CartItems.objects.filter(cart__cart_id=_cart_id(request),product=single_product).exists()
+        in_cart=CartItems.objects.filter(cart__cart_id=_cart_id(request),product=single_product.product_size.product_size).exists()
     except ProductImage.DoesNotExist:
         raise Http404("Product not found")
     context={

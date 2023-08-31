@@ -86,16 +86,20 @@ def profile(request):
         profile=profile.all()
     else:
         profile=None
-    
+    order=Order.objects.filter(user=user).count()
+
     context={
         'users':user,
-        'profile':profile
+        'profile':profile,
+        'order':order
     }
     return render(request,'user/profile.html',context)
 
 def add_address(request):
     user=request.user
     if request.method=='POST':
+        first_name=request.POST.get('first_name')
+        last_name=request.POST.get('last_name')
         address=request.POST.get('address')
         street=request.POST.get('street')
         city=request.POST.get('city')
@@ -104,6 +108,8 @@ def add_address(request):
         pin_code=request.POST.get('pin_code')
         if len(pin_code)==6:
             profile=UserProfile(user=user)
+            profile.first_name=first_name
+            profile.last_name=last_name
             profile.address=address
             profile.street=street
             profile.city=city
@@ -112,9 +118,13 @@ def add_address(request):
             profile.pin_code=pin_code
             profile.save()
             source = request.GET.get('source', 'checkout')
-            messages.success(request,'Address saved successfull')
-            return redirect(source)
-            print(profile)
+            if source == 'checkout':
+                messages.success(request, 'Address saved successfully')
+                return redirect('checkout')  # Redirect to the checkout page
+            else:
+                messages.success(request, 'Address saved successfully')
+                return redirect('add-address')  # Redirect to the add address page
+                
         else:
             messages.error(request,'Enter a valid address')
     return render(request,'user/add-address.html')
@@ -188,3 +198,34 @@ def order_list(request):
         'order_item':order_items,
     }
     return render(request,'user/order-list.html',contex)
+
+def edit_profile(request):
+    user=request.user
+    profile=UserProfile.objects.filter(user=user)
+    if profile.exists():
+        profile=profile.all()
+    else:
+        profile=None
+    if request.method=='POST':
+        username=request.POST.get('username') 
+        phone_number=request.POST.get('phone_number') 
+        email=request.POST.get('email') 
+
+        if username !=user.username and CustomUser.objects.filter(username=username).exists():
+            messages.error(request,'Username not available')
+        elif phone_number !=user.phone_number and CustomUser.objects.filter(phone_number=phone_number).exists():
+            messages.error(request,'Provide another Phone number')
+        elif email !=user.email and CustomUser.objects.filter(email=email).exists():
+            messages.error(request,'Provide another Email')
+        else:
+            user.username=username
+            user.phone_number=phone_number
+            user.email=email
+            user.save()
+        messages.success(request,'Changes made Successful')
+        return redirect('profile')
+    context={
+        'users':user,
+        'profile':profile
+    }
+    return render(request,'user/edit-profile.html',context)

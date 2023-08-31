@@ -15,11 +15,13 @@ class Payment(models.Model):
     )
  
     user=models.ForeignKey("account.CustomUser", on_delete=models.CASCADE)
-    payment_id=models.CharField(max_length=100)
     payment_method=models.CharField( max_length=100)
-    amount_paid=models.CharField( max_length=100)
+    amount_paid=models.CharField( max_length=100,null=True,blank=True)
     status=models.CharField( max_length=100,choices=PAYMENT_STATUS,default='Pending')
     created_at=models.DateTimeField(  auto_now_add=True)
+    razor_pay_order_id=models.CharField(max_length=150, null=True, blank=True)
+    razor_pay_payment_id=models.CharField(max_length=150, null=True, blank=True)
+    razor_pay_payment_signature=models.CharField(max_length=150, null=True, blank=True)
 
 
     def __str__(self):
@@ -45,6 +47,7 @@ class Order(models.Model):
     status=models.CharField( max_length=50,choices=ORDER_STATUS,default='Processing')
     created_at=models.DateTimeField( auto_now_add=True)
     slug  = models.CharField(max_length=200,null=True,blank=True)
+    is_paid = models.BooleanField(default=False)
 
 
     def __str__(self):
@@ -52,7 +55,7 @@ class Order(models.Model):
     
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(str(self.user.id) +str(self.created_at))
+            self.slug = slugify(str(self.user.id) +str(self.order_number))
         return super().save(*args, **kwargs)
 
 
@@ -64,7 +67,7 @@ class OrderProduct(models.Model):
     product_image=models.ForeignKey("store.ProductImage",  on_delete=models.CASCADE)
     quantity=models.PositiveIntegerField(default=0)
     product_price=models.DecimalField(max_digits=10, decimal_places=2)
-    created_at=models.DateTimeField( auto_now_add=True)
+    created_at=models.DateTimeField( auto_now_add=True) 
     updated_at=models.DateTimeField(auto_now=True )
 
 

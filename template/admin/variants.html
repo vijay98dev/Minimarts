@@ -29,7 +29,7 @@
             <td>{{variant.stock}}</td>
             <td>{{variant.product_size}}</td>
             <td>{{variant.is_available}}</td>
-            <td><a href="{% url 'product-images' variant.id %}" class="btn btn-secondary btn-sm">Show Variants</a></td>
+            <td><a href="{% url 'product-images' variant.id %}" class="btn btn-secondary btn-sm">Show Images</a></td>
             <td><a href="{% url 'delete-variant' variant.id %}" class="btn btn-danger btn-sm"> Delete</a>/<a href="{% url 'edit-variant' variant.id %}"><button type="button" class="btn btn-info btn-sm">Edit</button></a></td>
           </tr>
           {% endfor %}

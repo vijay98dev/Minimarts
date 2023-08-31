@@ -28,8 +28,8 @@ class CartItems(models.Model):
 
     def sub_total(self):
         return self.product.price * self.quantity
-    
-    
+
+
 class Wishlist(models.Model):
     user=models.ForeignKey("account.CustomUser",  on_delete=models.CASCADE)
     product=models.ForeignKey("store.ProductSize", on_delete=models.CASCADE)

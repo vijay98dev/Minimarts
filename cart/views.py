@@ -41,7 +41,6 @@ def add_cart(request,product_id):
     product=ProductSize.objects.get(id=product_id)
     if request.method=='POST':
         size=request.POST.get('size')
-        print(size)
          
     try:
         cart=Cart.objects.get(cart_id=_cart_id(request))
@@ -92,11 +91,13 @@ def remove_cart_items(request,product_id):
 
 def wishlist(request):
     wishlist=Wishlist.objects.filter(user=request.user)
-    product=ProductSize.objects.filter(id__in=wishlist.values('product'))
-    print(product)
-    product_image=ProductImage.objects.filter(product_size__in=product.values('id')).first()
-    if product_image:
-        print(product_image.id)
+    products=ProductSize.objects.filter(id__in=wishlist.values('product'))
+    product_image=[]
+    for product in products:
+        product_images=ProductImage.objects.filter(product_size=product).first()
+        if product_images:
+            product_image.append(product_images)
+    
     
     context={
         'wishlist':wishlist,

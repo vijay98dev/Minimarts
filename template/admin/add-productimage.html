@@ -1,5 +1,6 @@
 {% extends 'admin/category.html' %}
 {% load static %}
+{% block title %}Add Image{% endblock title %}
 {% block content %}
 <div class="container mt-4">
     <div class="row justify-content-center">
@@ -9,7 +10,7 @@
                     <h3 class="card-title" style="margin-top: 70px;">Add Images</h3>
                 </div>
                 <div class="card-body">
-                    <form method="post" action="{% url 'add-images'  %}" enctype="multipart/form-data">
+                    <form method="post" action="{% url 'add-images' variant.id %}" enctype="multipart/form-data">
                         {% csrf_token %}
                         
                         <div class="form-group">
@@ -18,7 +19,7 @@
                         </div>
                         <div class="text-center"> <!-- Center the form -->
                             <button type="submit" class="btn btn-sm btn-primary mt-4">Submit</button>
-                            <a href="{% url 'variants' id=id %}" class="btn btn-sm btn-secondary mt-4">Cancel</a>
+                            <a href="{% url 'product-images' variant.id %}" class="btn btn-sm btn-secondary mt-4">Cancel</a>
                         </div>
                     </form>
                 </div>

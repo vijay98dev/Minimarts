@@ -1,5 +1,6 @@
 {% extends 'admin/category.html' %}
 {% load static %}
+{% block title %}Add Variant{% endblock title %}
 {% block content %}
 <div class="container mt-4">
     <div class="row justify-content-center">
@@ -9,6 +10,7 @@
                     <h3 class="card-title" style="margin-top: 70px;">Add Variant</h3>
                 </div>
                 <div class="card-body">
+                    {% include 'include/alerts.html' %}
                     <form method="post" action="{% url 'add-variant' product.id  %}" enctype="multipart/form-data">
                         {% csrf_token %}
                         

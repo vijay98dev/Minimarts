@@ -70,13 +70,15 @@ class CustomUser(AbstractBaseUser):
 
 class UserProfile(models.Model):
     user=models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    first_name=models.CharField(max_length=50)
+    last_name=models.CharField(max_length=50)
     address=models.CharField( max_length=250)
     street = models.CharField(max_length=100)
     city = models.CharField(max_length=100)
     state = models.CharField( max_length=100)
     country = models.CharField( max_length=100)
     pin_code = models.CharField(max_length=10)
-    profile_image=models.ImageField(upload_to='photo/profile-image', max_length=None,null=True,default='C:/Users/DELL/OneDrive/Desktop/Miniproject/minimart/minimart/static/admin/assets/img/avatars/5.png')
+    profile_image=models.ImageField(upload_to='photo/profile-image', max_length=None,null=True,default='admin/assets/img/avatars/5.png')
     
 
     def __str__(self):

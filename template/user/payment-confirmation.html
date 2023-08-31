@@ -57,7 +57,7 @@
               </p>
             </div>
             <div>
-              <form action="{% url 'confirmation' %}" method="post">
+              <form action="{% url 'create-order' %}" method="post">
                 {% csrf_token %}
                 <h5 class="font-size-14 mb-3">Payment methods :</h5>
               <div class="row">
@@ -99,7 +99,7 @@
                 </div>
               </div>
               <br>
-              <button class="btn btn-primary btn-sm" type="submit">Place Order</button>
+              <button type="submit" class="btn btn-primary btn-sm" name="payment_submit">Place Order</button>
             </form>
             </div>
           </div>
@@ -128,8 +128,8 @@
 
     <script>
     var options = {
-        "key": "rzp_test_HtiGvWt8UENSgQ", // Enter the Key ID generated from the Dashboard
-        "amount": "100", // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+        "key": "rzp_test_Yhyp50af6R4HJ6", // Enter the Key ID generated from the Dashboard
+        "amount": "{{payment.amount}}", // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
         "currency": "INR",
         "name": "MiniMart",
         "description": "Thanks",
@@ -137,7 +137,7 @@
         "order_id": "{{payment.id}}", 
         "handler": function (response){
     
-        window.location.href = `http://127.0.0.1:8000/cart/?razorpay_payment_id=${response.razorpay_payment_id}&razorpay_order_id=${response.razorpay_order_id}`;
+        window.location.href = `http://127.0.0.1:8000/confirmation/?razorpay_payment_id=${response.razorpay_payment_id}&razorpay_order_id=${response.razorpay_order_id}`;
     
            
         },

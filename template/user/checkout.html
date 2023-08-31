@@ -37,13 +37,20 @@
     <article class="card mb-4">
     <div class="card-body">
         <h4 class="card-title mb-4">Delivery info</h4>
+        <form action="{% url 'create-order' %}" method="post">
+        {% csrf_token %}
+            <div class='mb-3'>
+            <div class='row'>
             {% for data in address %}
             <div class="form-check">
-                <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" checked>
+                <input class="form-check-input" type="radio" name="address" id="exampleRadios1" value="{{data.id}}" checked>
                 <label class="form-check-label" for="exampleRadios1">
                     <div class="card-radio text-truncate p-3">
                         <span class="fs-14 mb-4 d-block"
                           >Address {{ forloop.counter }}</span>
+                          <span
+                          class="text-muted fw-normal text-wrap mb-1 d-block"
+                          >{{data.first_name}} {{data.last_name}}</span>
                         <span
                           class="text-muted fw-normal text-wrap mb-1 d-block"
                           >{{data.address}}</span>
@@ -57,51 +64,12 @@
                 </label>
               </div>
             {% endfor %}
+            </div>
+            </div>
             <a href="{% url 'add-address' %}?source=checkout" class="btn btn-primary btn-sm">Add Address</a>
     </div> <!-- card-body.// -->
     </article> <!-- card.// -->
     
-    
-    <article class="accordion" id="accordion_pay">
-        <div class="card">
-            <header class="card-header">
-
-                <img src="{% static './images/misc/payment-paypal.png' %}" class="float-right" height="24"> 
-                <label class="form-check collapsed" data-toggle="collapse" data-target="#pay_paynet">
-                    <input class="form-check-input" name="payment-option" checked type="radio" value="option2">
-                    <h6 class="form-check-label"> 
-                        Paypal 
-                    </h6>
-                </label>
-            </header>
-            <div id="pay_paynet" class="collapse show" data-parent="#accordion_pay">
-            <div class="card-body">
-                <p class="text-center text-muted">Connect your PayPal account and use it to pay your bills. You'll be redirected to PayPal to add your billing information.</p>
-                <p class="text-center">
-                    <button id="rzp-button1"><img src="{% static './images/misc/btn-paypal.png' %}" height="32"></button>
-                    <br><br>
-                </p>
-            </div> <!-- card body .// -->
-            </div> <!-- collapse .// -->
-        </div> <!-- card.// -->
-        <div class="card">
-        <header class="card-header">
-            <img src="{% static './images/misc/payment-card.png' %}" class="float-right" height="24">  
-            <label class="form-check" data-toggle="collapse" data-target="#pay_payme">
-                <input class="form-check-input" name="payment-option" type="radio" value="cod">
-                <h6 class="form-check-label"> Cash on Delivery </h6>
-            </label>
-        </header>
-        <div id="pay_payme" class="collapse" data-parent="#accordion_pay">
-            <div class="card-body">
-                <p class="alert alert-success">For special offer select Paypal</p>
-            </div> <!-- card body .// -->
-        </div> <!-- collapse .// -->
-        </div> <!-- card.// -->
-        
-    </article> 
-    <!-- accordion end.// -->
-      
             </main> <!-- col.// -->
             <aside class="col-md-4">
                 <div class="card">
@@ -122,7 +90,7 @@
                 <p class="text-center mb-3">
                     <img src="{% static './images/misc/payments.png' %}" height="26">
                 </p>
-                <a href="{% url 'payment-confirmation' %}" class="btn btn-primary btn-block"> Place Order </a>
+                <button type="submit" class="btn btn-primary btn-block" name="checkout_submit">Make Payment </button>
                 
             </div> <!-- card-body.// -->
             </div> <!-- card.// -->

@@ -26,20 +26,19 @@
       </div>
       <br></br>
       <h2 class="text-center font-weight-bold" style="font-size: 44px;">Order Confirmed</h2>
-      <p class="text-center">Your Order is Confirmed. You Will receive an order comformation email/SMS 
+<p class="text-center">Your Order is Confirmed. You Will receive an order comformation email/SMS 
   Shortly with the expect delivery date for your items. </p>
   <div class="button-container row justify-content-center">
     <div class="col-md-2 col-sm-4">
       <a href="{% url 'index' %}" class="btn custom-button btn-block">Home</a>
     </div>
     <div class="col-md-2 col-sm-4">
-      <a href="{% url 'myorders' %}" class="btn custom-button btn-block">Orders</a>
+      <a href="{% url 'my-order' %}" class="btn custom-button btn-block">Orders</a>
     </div>
     <div class="col-md-2 col-sm-4">
-      <a href="{% url 'invoice' order_id %}" class="btn custom-button btn-block">Invoice</a>
+      <a href="{% url 'invoice' order.id %}" class="btn custom-button btn-block btn-dart">Invoice</a>
     </div>
   </div>
-  
     </div>
     
     {% comment %} <div class="video" style="margin-top: 50px;">
@@ -63,8 +62,18 @@
     height: 300px;
     margin: 0 auto; /* Center the div horizontally */
   }
+  {% comment %} .button-container {
+    text-align: center; /* Center the buttons horizontally */
+  }
 
-
+  .custom-button {
+    display: inline-block; /* Display buttons inline */
+    margin: 0 10px; /* Add margin between buttons */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  } {% endcomment %}
   </style>    
     
 

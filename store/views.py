@@ -44,9 +44,7 @@ def product_details(request,category_slug,product_slug):
 def search(request):
     if 'keyword' in request.GET:
         keyword=request.GET['keyword']
-        print(keyword,'2368726348621938691273412937498')
         if keyword:
-            print(keyword,'2368726348621938691273412937498')
             product=ProductImage.objects.filter(Q(product__product_name__icontains=keyword) | Q(product__description__icontains=keyword) | Q(product__category__category_name__icontains=keyword) | Q(product_size__price__icontains=keyword))
         context={
             'products':product

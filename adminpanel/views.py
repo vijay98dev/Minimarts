@@ -8,9 +8,11 @@ from account.models import CustomUser
 from category.models import Category
 from store.models import Product,ProductImage,ProductSize
 from django.utils.text import slugify
-from orders.models import Order,OrderProduct
-
-
+from orders.models import Order,OrderProduct,Payment
+from cart.models import Coupons,UserCoupons
+from datetime import timedelta, datetime ,date
+from django.utils import timezone
+from django.db.models import Count, Sum
 
 
 # Create your views here.
@@ -39,8 +41,59 @@ def admin_login(request):
     return render(request,'admin/admin-login.html')
 
 
+# def admin_dashboard(request):
+#     end_date=datetime.now()
+#     start_date = end_date - timedelta(days=30)
+#     product=ProductSize.objects.all()
+#     orders_within_range=Order.objects.filter(created_at__range=(start_date,end_date))
+#     total_amount=orders_within_range.aggregate()
+#     order=Order.objects.all()
+#     order_count=order.count()
+#     context={
+#         'order':order,
+#         'order_count':order_count
+#     }
+#     return render(request,'admin/admin_dashboard.html',context)
+
+
+
+
 def admin_dashboard(request):
-    return render(request,'admin/admin_dashboard.html')
+    end_date = datetime.now()
+    start_date = end_date - timedelta(days=7)  # Adjust the number of days as needed
+
+    # Query the database to get daily order counts for the last five days
+    daily_order_counts = (
+        Order.objects
+        .filter(created_at__range=(start_date, end_date))
+        .values('created_at__date')
+        .annotate(order_count=Count('id'))
+        .order_by('created_at__date')
+    )
+    orders= Order.objects.all().order_by('-created_at')[:10]
+    print(orders)
+    # Extract dates and counts for the chart
+    dates = [entry['created_at__date'].strftime('%Y-%m-%d') for entry in daily_order_counts]
+    counts = [entry['order_count'] for entry in daily_order_counts]
+    order=Order.objects.all()
+    order_count=order.count()
+    today = datetime.now()
+    month=end_date-timedelta(days=30)
+    total=(
+    Order.objects
+    .filter(created_at__range=(month, today))
+    .aggregate(total_order_total=Sum('order_total')))['total_order_total']
+    print(total)
+
+    context = {
+        'dates': dates,
+        'counts': counts, 
+        'orders': orders, 
+        'order_count': order_count, 
+        'total': total, 
+    }
+
+    return render(request, 'admin/admin_dashboard.html', context)
 
 @login_required(login_url='admin-login')
 def admin_logout(request):
@@ -322,3 +375,111 @@ def order_details(request,id):
         'order_status_choices':order_status_choices,
         }
     return render(request,'admin/admin_order_details.html',context)
+
+
+
+def sales_report(request):
+    order_items=OrderProduct.objects.all()
+    # for items in order_items:
+    #     sub_total=items.product_price*items.quantity
+    #     tax=(5*sub_total)/100
+    #     total=sub_total+tax
+    context={
+        'order_items':order_items,
+        # 'sub_total':sub_total,
+        # 'tax':tax,
+        # 'total':total,
+    }
+    return render(request,'admin/sales-report.html',context)
+
+
+def order(request):
+    orders=Order.objects.all().order_by('-created_at')
+    order_status_choices=Order.ORDER_STATUS
+    context={
+        'orders':orders,
+        'order_status_choices':order_status_choices
+    }
+    return render(request,'admin/orders.html',context)
+
+def update_order(request,id):
+    order=Order.objects.get(pk=id)
+    order_items=OrderProduct.objects.filter(order=order)
+    payment=Payment.objects.get(order=order)
+    if request.method=='POST':
+        status=request.POST.get('order_status')
+    order.status=status
+    
+    order.save()
+    if payment.payment_method=='cod':
+        if order.status=='Delivered':
+            order.is_paid=True
+            order.save()
+        else:
+            order.is_paid=False
+            order.save()
+    for items in order_items:
+        items.payment=payment
+        items.save()
+    return redirect('order')
+
+
+def coupon(request):
+    coupons=Coupons.objects.all()
+    context={
+        'coupons':coupons
+    }
+    return render(request,'admin/coupon.html',context)
+
+def add_coupon(request):
+    coupon=Coupons.objects.all()
+    if request.method=='POST':
+        coupon_code=request.POST.get('coupon_code')
+        description=request.POST.get('description')
+        minimum_amount=request.POST.get('minimum_amount')
+        discount=request.POST.get('discount')
+        valid_from=request.POST.get('valid_from')
+        valid_to=request.POST.get('valid_to')
+        try:
+            invalid_coupon=Coupons.objects.get(coupon_code=coupon_code)
+            messages.error(request,'Coupon Code already exist')
+            return redirect('add-coupon')
+        except Coupons.DoesNotExist:
+            coupon=Coupons.objects.create(coupon_code=coupon_code,description=description,minimum_amount=minimum_amount,discount=discount,valid_from=valid_from,valid_to=valid_to)
+            coupon.save()
+            messages.success(request,'Coupon added succesfully')
+            return redirect('coupon')
+        # if coupon_code!=coupon.coupon_code:
+        #     coupon=Coupons.objects.create(coupon_code=coupon_code,description=description,minimum_amount=minimum_amount,discount=discount,valid_from=valid_from,valid_to=valid_to)
+        #     coupon.save()
+        #     return redirect('coupon')
+        # else:
+        #     messages.error(request,'Coupon Code already exist')
+        #     return redirect('add-coupon')
+
+    return render(request,'admin/add-coupon.html')
+
+
+def edit_coupon(request,id):
+    coupon=Coupons.objects.get(pk=id)
+    if request.method=='POST':
+        description=request.POST.get('description')
+        minimum=request.POST.get('minimum_amount')
+        discount=request.POST.get('discount')
+       
+
+        coupon.description=description
+        coupon.minimum_amount=minimum
+        coupon.discount=discount
+       
+        coupon.save()
+        return redirect('coupon')
+    context={
+        'coupon':coupon
+    }
+    return render(request,'admin/edit-coupon.html',context)
+
+def delete_coupon(request,id):
+    coupon=Coupons.objects.get(pk=id)
+    coupon.delete()
+    return redirect('coupon')

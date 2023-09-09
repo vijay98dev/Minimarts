@@ -11,7 +11,6 @@ urlpatterns = [
     path('add-wishlist/<int:id>/',views.add_wishlist,name='add-wishlist'),
     path('remove-wishlist/<int:id>/',views.remove_wishlist,name='remove-wishlist'),
 
-
-
+    path('coupon-list/',views.coupon_list,name='coupon-list'),
 
 ]

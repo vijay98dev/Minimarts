@@ -56,7 +56,6 @@ def otp_verify(request,uid):
     if request.method=='POST':
         otp=request.POST.get('otp')
         user=CustomUser.objects.get(uid=uid)
-
         print(user.uid)
         # if otp==user.otp:
         #     login(request,user)

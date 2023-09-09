@@ -1,72 +1,110 @@
-{% extends 'user/base.html' %}
-{% load static %} 
-{% block titile %}Profile{% endblock titile %}
+{% extends 'user/base.html' %} 
+{% load static %}
+{% block title %}My orders{% endblock title %}
+
 {% block content %}
-<section class="section-conten padding-y bg" style="padding-top: 20px">
-    <div class="container">
-      <div class="row">
-        {% include 'include/sidebar.html' %}
-        <main class="col-md-9">
-          <article class="card">
+<div class="mt-5 mb-5" style="padding-left: 100px;">
+  <div class="row">
+    <!-- Sidebar Card -->
+
+    {% include 'include/sidebar.html' %}
+ 
+<section class="h-100 gradientc-ustom">
+  
+  {% for order in order %}
+
+  <div class="container py-25 h-90">
+    <div class="card shadow-0 border mb-2">
+      <div class="card-body" style="width: 800px;">
+        <div class="row">
+            <div class="col-md-2">
+              <a href="">
+                <img
+                    src="{{image.product_image.product_image.url}}"
+                    alt="Phone"
+                    style="width:90px"/>
+              </a>    
+            </div>
             
-            
-          </article>
-          <!-- order-group.// -->
-        </main>
-        
+          <div
+            class="col-md-2 text-center d-flex justify-content-center align-items-center"
+          >
+          <a href="">
+            <p class="text-muted mb-0">{{image.product.product.product_name}}</p>
+          </a>
+          </div>
+         
+          
+          <div
+            class="col-md-2 text-center d-flex justify-content-center align-items-center"
+          >
+            <p class="text-muted mb-0 small">Qty: {{quantity}}</p>
+          </div>
+          <div
+            class="col-md-2 text-center d-flex justify-content-center align-items-center"
+          >
+            <p class="text-muted mb-0 small">{{order.order_total}}</p>
+          </div>
+         
+
+          <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+            {% if order_item.order_status == 'Delivered' %}
+            <p class="text-muted mb-0 small">{{ order_item.order_status }}</p>&nbsp&nbsp
+            {% comment %} <form method="post" action="{% url 'cancel_order' order_item.id %}">
+              {% csrf_token %}
+              <input type="hidden" name="order_id" value="{{ order_item.id }}">
+              <button type="submit" class="btn-info">Return</button>
+            </form>
+            {% elif order_item.order_status == 'Cancelled' %}
+            <p class="text-muted mb-0 small">{{ order_item.order_status }}</p>&nbsp&nbsp
+            {% endcomment %}
+            {% else %} 
+              <p class="text-muted mb-0 small">{{ order_item.order_status }}</p>&nbsp&nbsp
+              <form method="post" action="">
+                {% csrf_token %}
+                <input type="hidden" name="order_id" value="{{ order_item.id }}">
+                <button type="submit" class="btn-danger">Cancel</button>
+              </form>
+            {% endif %}
+          </div>
+          <div
+          class="col-md-2 text-center d-flex justify-content-center align-items-center"
+        >
+        <a href="{% url 'invoice' order.id %}" class="button-link">Invoice</a>
       </div>
-      <!-- row.// -->
+
+        </div>
+        <hr class="mb-4" style="background-color: #e0e0e0; opacity: 1" />
+        <div class="row d-flex align-items-center">
+          <div class="col-md-2">
+            <p class="text-muted mb-0 small">Track Order</p>
+          </div>
+          <div class="col-md-10">
+            <div class="progress" style="height: 6px; border-radius: 16px">
+              <div
+                class="progress-bar"
+                role="progressbar"
+                style="
+                  width: 65%;
+                  border-radius: 16px;
+                  background-color: #a8729a;
+                "
+                aria-valuenow="65"
+                aria-valuemin="0"
+                aria-valuemax="100"
+              ></div>
+            </div>
+            <div class="d-flex justify-content-around mb-1">
+              <p class="text-muted mt-1 mb-0 small ms-xl-5">Order Confirmed</p>
+              <p class="text-muted mt-1 mb-0 small ms-xl-5">Out for delivary</p>
+              <p class="text-muted mt-1 mb-0 small ms-xl-5">Delivered</p>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-  </section>
-  <!-- ========================= SECTION CONTENT END// ========================= -->
-  
-  <style>
-    body {
-      {% comment %} background: rgb(99, 39, 120); {% endcomment %}
-    }
-  
-    .form-control:focus {
-      box-shadow: none;
-      border-color: #ba68c8;
-    }
-  
-    .profile-button {
-      background: rgb(99, 39, 120);
-      box-shadow: none;
-      border: none;
-    }
-  
-    .profile-button:hover {
-      background: #682773;
-    }
-  
-    .profile-button:focus {
-      background: #682773;
-      box-shadow: none;
-    }
-  
-    .profile-button:active {
-      background: #682773;
-      box-shadow: none;
-    }
-  
-    .back:hover {
-      color: #682773;
-      cursor: pointer;
-    }
-  
-    .labels {
-      font-size: 11px;
-    }
-  
-    .add-experience:hover {
-      background: #ba68c8;
-      color: #fff;
-      cursor: pointer;
-      border: solid 1px #ba68c8;
-    }
-  </style>
-
-
+  </div>
+  {% endfor %}
+</section>
 
 {% endblock content %}

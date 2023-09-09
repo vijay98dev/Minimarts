@@ -66,6 +66,7 @@
                     <label class="card-radio-label">
                       <input
                         type="radio"
+                        type="submit"
                         name="pay-method"
                         id="pay-methodoption3"
                         class="card-radio-input"
@@ -84,6 +85,7 @@
                     <label class="card-radio-label card-radio-button-label">
                       <input
                         type="radio"
+                        type="submit"
                         name="pay-method"
                         id="rzp-button1"
                         class="card-radio-input"
@@ -129,15 +131,15 @@
     <script>
     var options = {
         "key": "rzp_test_Yhyp50af6R4HJ6", // Enter the Key ID generated from the Dashboard
-        "amount": "{{payment.amount}}", // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+        "amount": "{{razorpay_payment.amount}}", // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
         "currency": "INR",
         "name": "MiniMart",
         "description": "Thanks",
         "image": "http://127.0.0.1:8000/static/assets/img/logo/time.png",
-        "order_id": "{{payment.id}}", 
+        "order_id": "{{razorpay_payment.id}}", 
         "handler": function (response){
     
-        window.location.href = `http://127.0.0.1:8000/confirmation/?razorpay_payment_id=${response.razorpay_payment_id}&razorpay_order_id=${response.razorpay_order_id}`;
+        window.location.href = `http://127.0.0.1:8000/confirmation/?razorpay_payment_id=${response.razorpay_payment_id}&razorpay_order_id=${response.razorpay_order_id}&razorpay_signature=${response.razorpay_signature}`;
     
            
         },

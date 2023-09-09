@@ -30,7 +30,17 @@ urlpatterns = [
 
     path('product-images/<int:id>/',views.product_image,name='product-images'),
     path('add-images/<int:id>/',views.add_image,name='add-images'),
-    # path('edit-images/<int:id>/',views.edit_image,name='edit-images'),
     path('delete-images/<int:id>/',views.delete_image,name='delete-images'),
+
+    path('coupon/',views.coupon,name='coupon'),
+    path('add-coupon/',views.add_coupon,name='add-coupon'),
+    path('edit-coupon/<int:id>',views.edit_coupon,name='edit-coupon'),
+    path('delete-coupon/<int:id>',views.delete_coupon,name='delete-coupon'),
+
+
+    path('sales-report/',views.sales_report,name='sales-report'),
+    path('order/',views.order,name='order'),
+    path('order_details/<int:id>',views.order_details,name='order_details'),
+    path('update_order/<int:id>',views.update_order,name='update_order'),
  
 ]

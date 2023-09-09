@@ -148,16 +148,45 @@
                 <div data-i18n="Analytics">Dashboard</div>
               </a>
             </li>
-
-            <li class="menu-header small text-uppercase">
-              <span class="menu-header-text">Pages</span>
-            </li>
             <li class="menu-item">
-              <a href="{% url 'admin-dashboard' %}" class="menu-link menu-toggle">
+              <a href="{% url 'users' %}" class="menu-link ">
                 <i class="menu-icon tf-icons bx bx-dock-top"></i>
                 <div data-i18n="Account">Account </div>
               </a>
-              <ul class="menu-sub">
+            </li>
+            <li class="menu-item">
+              <a href="{% url 'categories' %}" class="menu-link ">
+                <i class="menu-icon tf-icons bx bx-dock-top"></i>
+                <div data-i18n="Account">Category </div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="{% url 'product' %}" class="menu-link ">
+                <i class="menu-icon tf-icons bx bx-dock-top"></i>
+                <div data-i18n="Account">Product </div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="{% url 'order' %}" class="menu-link ">
+                <i class="menu-icon tf-icons bx bx-dock-top"></i>
+                <div data-i18n="Account">Order </div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="{% url 'coupon' %}" class="menu-link ">
+                <i class="menu-icon tf-icons bx bx-dock-top"></i>
+                <div data-i18n="Account">Coupon </div>
+              </a>
+            </li>
+            {% comment %} <li class="menu-header small text-uppercase">
+              <span class="menu-header-text">Pages</span>
+            </li> {% endcomment %}
+            {% comment %} <li class="menu-item">
+              <a href="{% url 'admin-dashboard' %}" class="menu-link menu-toggle">
+                <i class="menu-icon tf-icons bx bx-dock-top"></i>
+                <div data-i18n="Account">Account </div>
+              </a> {% endcomment %}
+              {% comment %} <ul class="menu-sub">
                 <li class="menu-item">
                   <a href="{% url 'users' %}" class="menu-link">
                     <div data-i18n="Account">Users</div>
@@ -165,8 +194,8 @@
                 </li>
                 
               </ul>
-            </li>
-            <li class="menu-item">
+            </li> {% endcomment %}
+            {% comment %} <li class="menu-item">
               <a href="{% url 'admin-dashboard' %}" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-dock-top"></i>
                 <div data-i18n="Category">Category </div>
@@ -207,14 +236,14 @@
                 </li>
                 
               </ul>
-            </li>
+            </li> {% endcomment %}
             <!-- Components -->
-            <li class="menu-header small text-uppercase"><span class="menu-header-text">Components</span></li>
+            <li class="menu-header small text-uppercase"><span class="menu-header-text">Reports</span></li>
             <!-- Cards -->
             <li class="menu-item">
-              <a href="cards-basic.html" class="menu-link">
+              <a href="{% url 'sales-report' %}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-collection"></i>
-                <div data-i18n="Basic">Cards</div>
+                <div data-i18n="Basic">Sales Report</div>
               </a>
             </li>
             <!-- User interface -->
@@ -481,7 +510,7 @@
                             </div>
                           </div>
                           <div class="flex-grow-1">
-                            <span class="fw-semibold d-block">John Doe</span>
+                            <span class="fw-semibold d-block">{{request.user.username}}</span>
                             <small class="text-muted">Admin</small>
                           </div>
                         </div>

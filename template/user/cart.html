@@ -37,7 +37,13 @@
     <tr>
         <td>
             <figure class="itemside align-items-center">
-                <div class="aside"><img src="{{cart_item.product.product_image.url}}" class="img-sm"  ></div>
+                <div class="aside">
+                    {% for img in image %}
+                    {% if img.product_size.id == cart_item.product.id %}
+                    <img src="{{img.product_image.url}}" class="img-sm"  >
+                    {% endif %}
+                    {% endfor %}
+                </div>
                 <figcaption class="info">
                     <a href="{{ cart_item.product.get_url }}" class="title text-dark">{{cart_item.product.product.product_name}}</a>
                     <p class="text-muted small">Size:{{cart_item.product.product_size}}<br> Brand: NIKE</p>
@@ -88,9 +94,25 @@
                   <dd class="text-right"> ₹{{tax}}</dd>
                 </dl>
                 <dl class="dlist-align">
-                  <dt>Graand Total:</dt>
+                    <dt>Discount:</dt>
+                    <dd class="text-right"> ₹{{discount}}</dd>
+                  </dl>
+                <dl class="dlist-align">
+                  <dt>Grand Total:</dt>
                   <dd class="text-right text-dark b"><strong>₹{{grand_total}}</strong></dd>
                 </dl>
+                <form method="POST" action="{% url 'cart' %}">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <a href="{% url 'coupon-list' %}" class="text-black"><label>Have Coupon?</label></a>
+                        <div class="input-group">
+                            <input type="text" name="coupon" class="form-control" placeholder="Enter your Coupon"></label>
+                            <span class="input-group-append">
+                                <button type="submit" class="btn btn-primary btn-sm">Apply</button>
+                            </span>
+                        </div>
+                    </div>
+                </form>
                 <hr>
                 <p class="text-center mb-3">
                     <img src="{% static './images/misc/payments.png' %}" height="26">

@@ -70,6 +70,9 @@ class OrderProduct(models.Model):
     quantity=models.PositiveIntegerField(default=0)
     product_price=models.DecimalField(max_digits=10, decimal_places=2)
     sub_total=models.DecimalField(max_digits=10, decimal_places=2,default=0)
+    tax=models.DecimalField(max_digits=10, decimal_places=2,default=0)
+    discount=models.DecimalField( max_digits=10, decimal_places=2,default=0)
+    total=models.DecimalField( max_digits=10, decimal_places=2,default=0)
     created_at=models.DateTimeField( auto_now_add=True) 
     updated_at=models.DateTimeField(auto_now=True )
 

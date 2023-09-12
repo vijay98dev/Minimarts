@@ -37,10 +37,12 @@ urlpatterns = [
     path('edit-coupon/<int:id>',views.edit_coupon,name='edit-coupon'),
     path('delete-coupon/<int:id>',views.delete_coupon,name='delete-coupon'),
 
-
     path('sales-report/',views.sales_report,name='sales-report'),
     path('order/',views.order,name='order'),
     path('order_details/<int:id>',views.order_details,name='order_details'),
     path('update_order/<int:id>',views.update_order,name='update_order'),
+
+    path('offers/',views.offers,name='offers'),
+    path('add-offer/',views.add_offer,name='add-offer'),
  
 ]

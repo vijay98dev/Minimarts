@@ -9,6 +9,7 @@ from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 def cart(request,total=0,quantity=0,cart_items=None):
+    user=request.user
     try:
         tax=0
         grand_total=0
@@ -16,11 +17,19 @@ def cart(request,total=0,quantity=0,cart_items=None):
         image=None
         if request.method=='POST':
             coupon_code=request.POST.get('coupon')
-            coupon=Coupons.objects.get(coupon_code=coupon_code)
-            cart=Cart.objects.get(cart_id=_cart_id(request))
-            cart.coupon=coupon
-            cart.save()
-            messages.success(request,'Coupons added succesfully')
+            try:
+                coupon = Coupons.objects.get(coupon_code=coupon_code)
+                # Check if the user already has this coupon
+                if not UserCoupons.objects.filter(user=user, coupon=coupon).exists():
+                    cart = Cart.objects.get(cart_id=_cart_id(request))
+                    cart.coupon = coupon
+                    cart.save()
+                    UserCoupons.objects.create(user=user, coupon=coupon)
+                    messages.success(request, 'Coupon added successfully')
+                else:
+                    messages.warning(request, 'You have already used this coupon')
+            except Coupons.DoesNotExist:
+                messages.warning(request, 'Please enter a valid coupon code')
         cart=Cart.objects.get(cart_id=_cart_id(request))
 
         # user_coupon=UserCoupons.objects.create(user=request.user,coupon=coupon)
@@ -31,10 +40,10 @@ def cart(request,total=0,quantity=0,cart_items=None):
             total+=cart_item.sub_total()
             quantity+=cart_item.quantity
             tax+=cart_item.tax()
-        if cart.coupon: 
-            discount=cart_item.discount_amount()
+            if cart.coupon: 
+                discount=cart_item.discount_amount()
         
-        grand_total=cart_item.total_after_discount()
+            grand_total=cart_item.total_after_discount()
         # if request.method=="POST":
         #     coupon=request.POST.get('coupon')
         #     coupon_obj=Coupons.objects.filter(coupon_code=coupon)

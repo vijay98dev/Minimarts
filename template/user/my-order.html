@@ -7,10 +7,11 @@
   <div class="row">
     <!-- Sidebar Card -->
 
-    {% include 'include/sidebar.html' %}
+  {% include 'include/sidebar.html' %}
  
 <section class="h-100 gradientc-ustom">
-  
+  {% include 'include/alerts.html' %}
+
   {% for order in order %}
 
   <div class="container py-25 h-90">
@@ -18,7 +19,7 @@
       <div class="card-body" style="width: 800px;">
         <div class="row">
             <div class="col-md-2">
-              <a href="">
+              <a href="{% url 'order_details' order.id%}">
                 <img
                     src="{{image.product_image.product_image.url}}"
                     alt="Phone"
@@ -29,7 +30,7 @@
           <div
             class="col-md-2 text-center d-flex justify-content-center align-items-center"
           >
-          <a href="">
+          <a href="{% url 'order-details' order.id %}">
             <p class="text-muted mb-0">{{image.product.product.product_name}}</p>
           </a>
           </div>
@@ -60,7 +61,7 @@
             {% endcomment %}
             {% else %} 
               <p class="text-muted mb-0 small">{{ order_item.order_status }}</p>&nbsp&nbsp
-              <form method="post" action="">
+              <form method="post" action="{% url 'cancel_order' order.id %}">
                 {% csrf_token %}
                 <input type="hidden" name="order_id" value="{{ order_item.id }}">
                 <button type="submit" class="btn-danger">Cancel</button>

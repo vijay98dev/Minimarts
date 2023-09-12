@@ -1,7 +1,8 @@
 from django.db import models
 from account.models import CustomUser
 from store.models import Product,ProductImage,ProductSize
-
+from django.utils import timezone
+from datetime import date
 
 # Create your models here.
 
@@ -68,8 +69,21 @@ class Coupons(models.Model):
     valid_from=models.DateTimeField()
     valid_to=models.DateTimeField()
 
+    def __str__(self):
+        return self.coupon_code
+    
+
+    def is_valid(self):
+        now=timezone.now()
+        if self.valid_to!=now:
+            self.is_expired=True
+            return self.is_expired
+        else:
+            return self.is_expired
+
 
 class UserCoupons(models.Model):
     user=models.ForeignKey("account.CustomUser", on_delete=models.CASCADE)
     coupon=models.ForeignKey("cart.Coupons", on_delete=models.CASCADE)
     is_used=models.BooleanField(default=True)
+

@@ -9,6 +9,7 @@
     {% include 'include/sidebar.html' %}
    
     <section class="col-md-6">
+      {% include 'include/alerts.html' %}
       {% for order_items in order_items %}
       <div class="container py-25 h-50">
         <div class="card shadow-0 border mb-2">
@@ -49,10 +50,10 @@
               <div
                 class="col-md-2 text-center d-flex flex-column justify-content-center align-items-center"
               >
-                {% if product.order_status == 'Delivered' %}
+                {% comment %} {% if product.order_status == 'Delivered' %}
                 <form
                   method="post"
-                  action=""
+                  action="{% url 'cancel_items' order_items.id%}"
                 >
                   {% csrf_token %}
                   <input
@@ -63,10 +64,10 @@
                   <p class="text-muted mb-0 small">
                     Payment status: {{ product.order_status }}
                   </p>
-                  <button type="submit" class="btn-info">Return</button>
-                </form>
+                  <button type="submit" class="btn-info">Cancel</button>
+                </form> {% endcomment %}
 
-                {% elif product.order_status == 'Cancelled' %}
+                {% if product.order_status == 'Cancelled' %}
 
                 <p class="text-muted mb-0 small">
                   Payment status: {{ product.order_status }}
@@ -75,7 +76,7 @@
                 {% else %}
                 <form
                   method="post"
-                  action=""
+                  action="{% url 'cancel_items' order_items.id %}"
                 >
                   {% csrf_token %}
                   <input

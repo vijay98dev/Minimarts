@@ -1,27 +1,27 @@
 from django.shortcuts import render
-from store.models import Product,ProductImage,ProductSize,CategoryOffer
+from store.models import Product,ProductImage,ProductSize
 from orders.models import Order,Payment,OrderProduct
-from datetime import timezone
+from django.utils import timezone
 
 
 # Create your views here.
 def index(request):
     product=ProductImage.objects.all()
-    try:
-        offers=CategoryOffer.objects.filter(valid_to=timezone.now())
-        offer_products=[]
-        for offer in offers:
-            products=offer.product.all()
-            print(products,'111')
-            offer_products.append({'offer':offer,'products':products})
-        print(offer_products)
-    except CategoryOffer.DoesNotExist:
-        pass
+    # try:
+    #     offers=CategoryOffer.objects.filter(valid_to=timezone.now())
+    #     offer_products=[]
+    #     for offer in offers:
+    #         products=offer.product.all()
+    #         print(products,'111')
+    #         offer_products.append({'offer':offer,'products':products})
+    #     print(offer_products)
+    # except CategoryOffer.DoesNotExist:
+    #     pass
 
     context={
         'products':product,
-        'offers':offers,
-        'offer_products':offer_products,
+        # 'offers':offers,
+        # 'offer_products':offer_products,
     }
     return render(request,'user/index.html',context)
 

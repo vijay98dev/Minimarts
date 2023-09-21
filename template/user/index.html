@@ -52,7 +52,7 @@
   <!-- container // -->
 </section>
 <!-- ========================= SECTION  END// ========================= -->
-{% if offers %}
+{% comment %} {% if offers %}
 <section class="section-name padding-y-sm">
   <div class="container">
     <header class="section-heading">
@@ -69,11 +69,24 @@
           <a href="{{ product.get_url }}" class="img-wrap">
             <img src="{{ product.product_image.url }}" />
           </a>
+          {% if product.product_size.offer_price != 0 %}
           <figcaption class="info-wrap">
-            <a href="{{ product.get_url }}" class="title">{{ product.product_name }}</a>
-            <div class="price mt-1">₹{{ product.product_size.offer_price }}</div>
+            <a href="{{product.get_url}}" class="title"
+              >{{product.product.product_name}}</a
+            >
+            <div class="price mt-1">₹{{product.product_size.price}}</div>
+            <div class="price mt-1">₹{{product.product_size.offer_price}}</div>
             <!-- price-wrap.// -->
           </figcaption>
+          {% else %}
+          <figcaption class="info-wrap">
+            <a href="{{product.get_url}}" class="title"
+              >{{product.product.product_name}}</a
+            >
+            <div class="price mt-1">₹{{product.product_size.price}}</div>
+            <!-- price-wrap.// -->
+          </figcaption>
+          {% endif %}
         </div>
         {% endfor %}
       </div>
@@ -84,6 +97,6 @@
   </div>
   <!-- container // -->
 </section>
-{% endif %}
+{% endif %} {% endcomment %}
 
 {% endblock content %}

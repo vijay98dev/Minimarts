@@ -18,7 +18,6 @@ class Product(models.Model):
 class ProductSize(models.Model):
     product_size=models.FloatField(max_length=5,blank=False)
     price=models.IntegerField()
-    offer_amount=models.IntegerField(default=0)
     stock=models.IntegerField()
     is_available=models.BooleanField(default=True)
     is_delete=models.BooleanField(default=False)
@@ -68,27 +67,3 @@ class ProductImage(models.Model):
     
 
 
-class CategoryOffer(models.Model):
-    offer_name = models.CharField(max_length=100)
-    valid_to = models.DateField()
-    category = models.ForeignKey("category.Category", on_delete=models.CASCADE)
-    discount_percentage = models.IntegerField()
-    product = models.ManyToManyField("store.Product")   
-    is_active = models.BooleanField(default=True)
-
-    def __str__(self):
-        return self.offer_name
-
-    def is_valid(self):
-        now = timezone.now()
-        if self.valid_to != now:
-            self.is_active = True
-            return self.is_active
-        else:
-            return self.is_active
-
-    def offer_amount(self):
-        percentage=self.discount_percentage
-        product_price=self.product.price
-        offer_price=product_price-((product_price*percentage)/100)
-        return offer_price  

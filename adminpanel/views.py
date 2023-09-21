@@ -6,7 +6,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from account.models import CustomUser
 from category.models import Category
-from store.models import Product,ProductImage,ProductSize,CategoryOffer
+from store.models import Product,ProductImage,ProductSize
 from django.utils.text import slugify
 from orders.models import Order,OrderProduct,Payment
 from cart.models import Coupons,UserCoupons
@@ -487,32 +487,3 @@ def delete_coupon(request,id):
     return redirect('coupon')
 
 
-def offers(request):
-    offers=CategoryOffer.objects.all()
-    context={
-        'offers':offers
-    }
-    return render(request,'admin/offers.html',context)
-
-
-def add_offer(request):
-    categories=Category.objects.all()
-    if request.method=='POST':
-        offer_name=request.POST.get('offer_name')
-        category=request.POST.get('category')
-        discount_percentage=request.POST.get('discount_percentage')
-        expires_on=request.POST.get('valid_to')
-        try:
-            cat=Category.objects.get(id=category)
-        except Category.DoesNotExist:
-            messages.error(request,'Invalid category selected')
-            return redirect('add-offer')
-        product=Product.objects.get(category=cat)
-        if  CategoryOffer.objects.filter(Q(offer_name=offer_name) &Q(category=category)):
-            messages.warning(request,'Offer already exist')
-        else:
-            offer=CategoryOffer.objects.create(offer_name=offer_name,valid_to=expires_on,category=cat,discount_percentage=discount_percentage,product=product)
-    context={
-        'categories':categories
-    }
-    return render(request,'admin/add-offer.html',context)

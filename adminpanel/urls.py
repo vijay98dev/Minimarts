@@ -42,7 +42,7 @@ urlpatterns = [
     path('order_details/<int:id>',views.order_details,name='order_details'),
     path('update_order/<int:id>',views.update_order,name='update_order'),
 
-    path('offers/',views.offers,name='offers'),
-    path('add-offer/',views.add_offer,name='add-offer'),
+    # path('offers/',views.offers,name='offers'),
+    # path('add-offer/',views.add_offer,name='add-offer'),
  
 ]

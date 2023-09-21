@@ -92,7 +92,7 @@ DATABASES = {
         'NAME': 'mini_project',
         'USER': 'postgres',
         'PASSWORD':'admin',
-        'HOST':'',
+        'HOST':'localhost',
         'PORT':'5432',
     }
 }

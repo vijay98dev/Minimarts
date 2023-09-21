@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from store.models import Product,ProductImage,ProductSize
 from orders.models import Order,Payment,OrderProduct
-from django.utils import timezone
+# from django.utils import timezone
 
 
 # Create your views here.
